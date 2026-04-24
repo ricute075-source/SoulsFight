@@ -10,7 +10,7 @@
         /* SCROLLBAR & OVERLAYS */
         ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-thumb { background: var(--neon-cyan); border-radius: 10px; }
         .fullscreen-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 12, 16, 0.95); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(8px); }
-        .panel { background: rgba(15, 20, 25, 0.95); padding: 25px; border-radius: 12px; border: 2px solid var(--neon-cyan); text-align: center; width: 90%; max-width: 750px; max-height: 95vh; overflow-y: auto; box-shadow: 0 0 30px rgba(102, 252, 241, 0.2); display: flex; flex-direction: column; align-items: center;}
+        .panel { background: rgba(15, 20, 25, 0.95); padding: 25px; border-radius: 12px; border: 2px solid var(--neon-cyan); text-align: center; width: 90%; max-width: 680px; max-height: 95vh; overflow-y: auto; box-shadow: 0 0 30px rgba(102, 252, 241, 0.2); display: flex; flex-direction: column; align-items: center;}
         
         .title-glow { color: var(--neon-cyan); margin-top: 0; letter-spacing: 4px; text-transform: uppercase; text-shadow: 0 0 15px var(--neon-cyan); }
         .input-name { padding: 12px; font-size: 16px; border-radius: 6px; border: 1px solid var(--neon-cyan); background: #1f2833; color: var(--neon-cyan); margin-bottom: 15px; width: 80%; text-align: center; font-weight: bold; text-transform: uppercase; outline: none; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);}
@@ -320,7 +320,7 @@
             </div>
 
             <div style="background: rgba(0,0,0,0.6); padding: 10px 20px; border-radius: 8px; margin-top: 15px; font-size: 14px; text-align: center; border: 1px solid #333; color: #ccc; width: 100%; box-sizing: border-box;">
-                <span style="color:var(--neon-cyan)">[A/D]: Đi</span> &nbsp;|&nbsp; <span style="color:var(--neon-gold)">[W]: Nhảy/Double Jump</span> &nbsp;|&nbsp; <span style="color:#e67e22">[Q]: Kỹ Năng Class</span> &nbsp;|&nbsp; <span style="color:#00b894">[Shift]: Đỡ</span> &nbsp;|&nbsp; <span style="color:#f39c12">[E]: PARRY</span> &nbsp;|&nbsp; <span style="color:var(--neon-red)">[Đè Space]: Đánh</span> &nbsp;|&nbsp; <span style="color:#8e44ad">[S]: Tối Thượng</span>
+                <span style="color:var(--neon-cyan)">[A/D]: Đi</span> &nbsp;|&nbsp; <span style="color:var(--neon-gold)">[W]: Nhảy/Double Jump</span> &nbsp;|&nbsp; <span style="color:#e67e22">[Q]: Kỹ Năng Class</span> &nbsp;|&nbsp; <span style="color:#00b894">[Shift]: Đỡ</span> &nbsp;|&nbsp; <span style="color:#f39c12">[E]: PARRY</span> &nbsp;|&nbsp; <span style="color:var(--neon-red)">[Đè Space]: Đánh Liên Tục</span> &nbsp;|&nbsp; <span style="color:#8e44ad">[S]: Tối Thượng</span>
             </div>
         </div>
     </div>
@@ -375,6 +375,8 @@
             { id: 9, name: "Lãng Khách Gió", icon: "🌪️", color: "#1abc9c", cd: 8, weapon: 'wind_blade', ult: 'hurricane', allowed: ['wind_blade', 'hurricane', 'katana'], desc: "<span class='class-q-skill'>[Q] Tường Gió:</span> Phóng Đao gió chậm<br>⚔️ VK: Đao Gió | 💥 Ult: Lốc Xoáy" },
             { id: 10, name: "Thời Không", icon: "⏳", color: "#3498db", cd: 15, weapon: 'plasma', ult: 'black_hole', allowed: ['plasma', 'laser', 'black_hole', 'bubble_spell', 'crystal_shield'], desc: "<span class='class-q-skill'>[Q] Đóng Băng:</span> Làm chậm vô hạn<br>⚔️ VK: Súng Plasma | 💥 Ult: Hố Đen" }
         ];
+
+        const dailyBosses = [ { id: 'fish', name: 'Cá Khổng Lồ', weapon: 'bubble_spell', color: '#0984e3', hint: 'Bong bóng màu sắc rực rỡ nhưng đừng để chạm vào! Bạn chỉ có 60 giây.' }, { id: 'worm', name: 'Giun Cát', weapon: 'earth_spike', color: '#e17055', hint: 'Cẩn thận khi nó lặn mất tăm, mặt đất sẽ rung chuyển!' }, { id: 'wind', name: 'Tinh Linh Gió', weapon: 'wind_blade', color: '#55efc4', hint: 'Tốc độ chém đao gió của nó là phi thường!' }, { id: 'spider', name: 'Nhện Máy', weapon: 'emp_missile', color: '#a29bfe', hint: 'Cảnh báo! Nó gọi vòng lôi nhắm từ trên không!' }, { id: 'toad', name: 'Cóc Độc', weapon: 'toxic_bomb', color: '#00b894', hint: 'Xả vùng độc tồn tại vĩnh viễn trên sân!' }, { id: 'golem', name: 'Golem Pha Lê', weapon: 'crystal_shield', color: '#81ecec', hint: 'Nó có thể bật khiên phản đòn lại bạn!' }, { id: 'bat', name: 'Dơi Lửa', weapon: 'flamethrower', color: '#d63031', hint: 'Bay lượn trên cao và nhả lửa liên tục!' }, { id: 'ninja', name: 'Ninja Bóng Tối', weapon: 'lightning_shuriken', color: '#2d3436', hint: 'Giật lùi về sau và phóng phi tiêu dồn dập!' }, { id: 'bird', name: 'Lôi Điểu', weapon: 'lightning_spear', color: '#fdcb6e', hint: 'Gọi sấm sét giật tung cả đấu trường!' }, { id: 'knight', name: 'Kỵ Sĩ Nguyền', weapon: 'vampiric_sword', color: '#6c5ce7', hint: 'Lướt áp sát bạn với những cú chém hút máu!' } ];
 
         // --- GLOBAL STATE ---
         let gameMode = ''; let currentBoss = 'normal'; let myRole = 'p1'; let currentRoom = null; let currentCoopType = ''; let oppClassId = 1;
@@ -488,19 +490,21 @@
         // RENDER KHO VŨ KHÍ CÓ LỌC THEO CLASS
         function renderShopAndInventory() {
             let shopHtml = ''; 
-            // Chỉ render những VK cơ bản trong shop
+            let invHtml = '<div><span class="equip-type-label">MẶC ĐỊNH</span><button class="btn btn-equip" id="eq-none" onclick="equipItem(\'none\')">VŨ KHÍ CLASS</button></div> ';
+            
+            let heroAllowed = classes.find(c => c.id === currentClassId).allowed;
+
+            // Render Shop (Only basic weapons)
             for(let key in weapons) {
                 let isOwned = unlocked[key] || false;
                 shopHtml += `<div class="shop-item"><span>${weapons[key].name}</span> <span><b style="color:var(--neon-gold)">${weapons[key].price} V</b> <button class="btn btn-equip" style="background: ${isOwned ? '#333' : 'var(--neon-cyan)'}; border:none; color: ${isOwned ? '#fff' : '#000'}; width: 60px; display:inline-block;" onclick="buyItem('${key}', ${weapons[key].price})" ${isOwned?'disabled':''}>${isOwned ? 'Đã có' : 'Mua'}</button></span></div>`;
             }
             document.getElementById('shop-list').innerHTML = shopHtml;
 
-            let invHtml = '<div><span class="equip-type-label">MẶC ĐỊNH</span><button class="btn btn-equip active" id="eq-none" onclick="equipItem(\'none\')">VŨ KHÍ CLASS</button></div> ';
-            let heroAllowed = classes.find(c => c.id === currentClassId).allowed;
+            // Render Inventory (All owned items)
             let allItems = { ...weapons, ...unique_weapons, ...ultimates };
-
             for(let key in allItems) {
-                if (unlocked[key]) {
+                if(unlocked[key]) {
                     let isAllowed = heroAllowed.includes(key);
                     let wName = allItems[key].name;
                     let isUlt = ultimates.hasOwnProperty(key);
@@ -514,10 +518,12 @@
                     invHtml += `<div><span class="equip-type-label">${typeLabel}</span><button class="btn btn-equip ${disableClass}" style="${colorStyle}" onclick="equipItem('${key}')" id="eq-${key}">${btnText}</button></div> `;
                 }
             }
+            
             document.getElementById('inventory-list').innerHTML = invHtml; 
             document.getElementById('round-inventory-list').innerHTML = invHtml;
+            document.getElementById('coin-count').innerText = coins; 
+            document.getElementById('shop-coin-count').innerText = coins;
             
-            document.getElementById('coin-count').innerText = coins; document.getElementById('shop-coin-count').innerText = coins; document.getElementById('heart-count').innerText = hearts; document.getElementById('shard-count').innerText = shards;
             equipItem(currentEquip);
         }
 
@@ -530,7 +536,9 @@
             }
 
             currentEquip = item; localStorage.setItem('currentEquip', item);
-            document.querySelectorAll('.btn-equip').forEach(btn => btn.classList.remove('active')); document.querySelectorAll(`#eq-${item}`).forEach(btn => btn.classList.add('active')); 
+            document.querySelectorAll('.btn-equip').forEach(btn => btn.classList.remove('active')); 
+            let targetBtn = document.getElementById(`eq-${item}`);
+            if(targetBtn) targetBtn.classList.add('active'); 
             
             let atkKey = item === 'none' ? classes.find(c => c.id === currentClassId).weapon : item;
             let wData = weapons[atkKey] || ultimates[atkKey] || unique_weapons[atkKey];
@@ -540,6 +548,10 @@
             document.querySelectorAll('button').forEach(b => b.blur());
         }
 
+        document.getElementById('playerNameInput').addEventListener('input', function() { localStorage.setItem('playerName', this.value.trim()); });
+        updateMenuHero(); // INIT FIRST UI STATE
+
+        // --- GAME PLAY ENGINE ---
         const groundY = 290; let entities = []; 
         const getP1StartX = () => 50; const getP2StartX = () => 650; const getP1StartDir = () => 1; const getP2StartDir = () => -1;
         
@@ -618,6 +630,9 @@
             if(ammoUi1) ammoUi1.style.display = hasAmmoCheck ? 'block' : 'none'; if(ammoUi2) ammoUi2.style.display = hasAmmoCheck ? 'block' : 'none';
         }
 
+        function rematchBoss() { if (gameMode === 'bot') startBotMode(currentBoss); else if (gameMode === 'daily_boss') startDailyBoss(); else if (gameMode === 'coop') switchScreen('screen-boss'); }
+        function requestRematchPvP() { startOnlineMode(); }
+
         function showWaitingScreen(msg, showStartBtn = false) { switchScreen('screen-waiting'); document.getElementById('wait-msg').innerText = msg; document.getElementById('btn-start-early').style.display = (showStartBtn && isLobbyHost) ? 'block' : 'none'; document.getElementById('btn-urge-host').style.display = (showStartBtn && !isLobbyHost) ? 'block' : 'none'; }
         function cancelMatchmaking() { socket.emit('cancelMatch'); switchScreen('screen-menu'); if(animationId) cancelAnimationFrame(animationId); }
         function startOnlineMode() { myRole = 'p1'; bo3Score = {p1:0, p2:0}; matchUltimateUsed = false; socket.emit('findMatch', document.getElementById('playerNameInput').value || "Người Chơi"); showWaitingScreen("ĐANG TÌM ĐỐI THỦ 1VS1..."); }
@@ -646,11 +661,10 @@
         
         socket.on('coopBossHpUpdate', (hp) => { p2.hp = hp; updateBossHpUI(); if (p2.hp <= 0 && !p2.isDead) { p2.isDead = true; document.getElementById('player2').classList.add('dead'); } }); 
         socket.on('bossStunned', (dur) => handleStun(getOpp(), dur));
-        
-        // --- COOP WIN & DROPS VIP ---
         socket.on('coopBossDefeated', () => { 
-            p2.isDead = true; document.getElementById('player2').classList.add('dead'); 
-            hearts += 1; localStorage.setItem('hearts', hearts); 
+            p2.isDead = true; document.getElementById('player2').classList.add('dead'); hearts += 1; localStorage.setItem('hearts', hearts); 
+            
+            let gotShard = false; if (Math.random() < 0.3) { shards++; localStorage.setItem('shards', shards); gotShard = true; } 
             
             let rTxt = "+ TRÁI TIM QUẢ CẢM!";
             if (currentBoss === 'titan') { unlockItem('gravity_hammer'); rTxt += " & VIP: Búa Trọng Lực"; }
@@ -658,16 +672,14 @@
             if (currentBoss === 'ifrit') { unlockItem('dragon_blade'); rTxt += " & VIP: Kiếm Rồng"; }
             if (currentBoss === 'shadow') { unlockItem('void_scythe'); rTxt += " & VIP: Lưỡi Hái Hư Không"; }
             if (currentBoss === 'omega') { unlockItem('omega_beam'); rTxt += " & MAX: Tia Omega"; }
+            if (gotShard) rTxt += " & 1 MẢNH CỔ ĐẠI!";
 
-            if (Math.random() < 0.3) { shards++; localStorage.setItem('shards', shards); rTxt += " & 1 MẢNH CỔ ĐẠI!"; } 
-            
             renderShopAndInventory(); 
             document.getElementById('game-over-screen-inner').style.display = 'flex'; 
             document.getElementById('winner-text').innerText = "CHIẾN THẮNG!"; document.getElementById('winner-text').style.color = "var(--neon-gold)"; 
             document.getElementById('btn-rematch-boss').style.display = 'inline-block'; document.getElementById('btn-rematch-boss').disabled = false; 
             document.getElementById('btn-spectate').style.display = 'none'; 
-            document.getElementById('reward-text').innerText = rTxt; 
-            document.getElementById('reward-text').style.display = 'block'; 
+            document.getElementById('reward-text').innerText = rTxt; document.getElementById('reward-text').style.display = 'block'; 
             if(animationId) cancelAnimationFrame(animationId); 
         });
         
@@ -726,7 +738,7 @@
 
         function showFloatingText(x, y, text, cssClass) {
             let pTxt = document.createElement('div'); pTxt.className = `effect-text ${cssClass}`; pTxt.innerText = text; 
-            let tx = (Math.random() * 60 - 30) + 'px'; pTxt.style.setProperty('--tx', tx); 
+            let tx = (Math.random() * 60 - 30) + 'px'; pTxt.style.setProperty('--tx', tx); // Random hướng nảy
             pTxt.style.left = x+'px'; pTxt.style.top = (y-20)+'px'; document.getElementById('arena').appendChild(pTxt); setTimeout(()=>pTxt.remove(), 800);
         }
 
