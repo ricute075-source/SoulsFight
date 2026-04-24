@@ -133,7 +133,7 @@
         .status-slow { filter: hue-rotate(180deg) saturate(2) !important; }
         .status-bleed { filter: contrast(1.5) drop-shadow(0 0 15px red) !important; }
 
-        /* BOSS SKIN TRONG HỆ THỐNG MỚI */
+        /* BOSS SKIN */
         @keyframes rainbowFish { 0% { filter: hue-rotate(0deg) saturate(2) brightness(1.5); } 100% { filter: hue-rotate(360deg) saturate(2) brightness(1.5); } }
         .boss-fish { background: linear-gradient(to bottom, #74b9ff, #0984e3) !important; animation: rainbowFish 2s linear infinite !important; box-shadow: 0 0 30px #0984e3 !important; border-radius: 30px; width: 80px !important;}
         .fade-out { opacity: 0 !important; pointer-events: none; transition: opacity 0.5s ease-in-out !important; } 
@@ -332,12 +332,10 @@
         function switchScreen(screenId) { document.querySelectorAll('.fullscreen-overlay').forEach(p => p.style.display = 'none'); document.getElementById('game-container').style.display = 'none'; if(screenId) document.getElementById(screenId).style.display = 'flex'; window.focus(); document.querySelectorAll('button').forEach(b => b.blur()); }
 
         const socket = io();
-        let gameMode = ''; let currentBoss = 'normal'; let myRole = 'p1'; let currentRoom = null; let currentCoopType = ''; let oppClassId = 1;
-        let teammates = {}; let animationId; let attackCooldown = 0; let ultimateReady = true; let matchUltimateUsed = false;
-        let isLobbyHost = false; let isGameHost = false; 
-        let bo3Score = { p1: 0, p2: 0 }; let bossTimerInterval = null; 
         
-        // --- DANH SÁCH VŨ KHÍ GỐC ---
+        // --- KHAI BÁO DỮ LIỆU CỐ ĐỊNH LÊN ĐẦU TIÊN (SỬA LỖI REFERENCE ERROR) ---
+        const maps = [ { name: "Hỏa Diện", bg: "linear-gradient(to bottom, #4a0e0e 0%, #1a0505 100%)", buff: "energy" }, { name: "Lõi Tương Lai", bg: "linear-gradient(to bottom, #001f3f 0%, #000 100%)", buff: "piercing" }, { name: "Cấm Địa", bg: "linear-gradient(to bottom, #2b3a2a 0%, #1a1a1a 100%)", buff: "ballistic" }, { name: "Phế Tích Thép", bg: "linear-gradient(to bottom, #3b3b3b 0%, #111 100%)", buff: "melee" }, { name: "Không Gian Ảo", bg: "linear-gradient(to bottom, #190033 0%, #000 100%)", buff: "explosive" } ];
+        
         const weapons = {
             energy_shield: { name: 'Khiên Năng Lượng', price: 100, type: 'defense', stm: 5, ammo: 0, firerate: 30 },
             heavy_pistol: { name: 'Súng Phá Giáp', price: 150, type: 'piercing', stm: 5, ammo: 2, firerate: 15 },
@@ -365,7 +363,6 @@
         const ultimates = { dragon_blade: { name: '[VIP] Kiếm Rồng', price: 2000, type: 'energy', stm: 20, ammo: 0, firerate: 45, dmg: 75 }, gravity_hammer: { name: '[VIP] Búa Trọng Lực', price: 2000, type: 'explosive', stm: 10, ammo: 0, firerate: 25, dmg: 65 }, storm_bow: { name: '[VIP] Cung Bão Tố', price: 2000, type: 'ballistic', stm: 5, ammo: 0, firerate: 10 }, void_scythe: { name: '[VIP] Lưỡi Hái Hư Không', price: 2000, type: 'piercing', stm: 10, ammo: 0, firerate: 20 }, omega_beam: { name: '[MAX] TIA OMEGA', price: 3000, type: 'energy', stm: 30, ammo: 0, firerate: 60, dmg: 110 } };
         const unique_weapons = { bubble_spell: { name: '[ĐỘC NHẤT] Phép Bong Bóng', type: 'magic', stm: 10, ammo: 0, firerate: 25, ult_type: 'bubble_prison', dmg: 60 }, earth_spike: { name: '[ĐỘC NHẤT] Chông Đất', type: 'piercing', stm: 12, ammo: 0, firerate: 25, ult_type: 'earth_shatter', dmg: 75 }, wind_blade: { name: '[ĐỘC NHẤT] Đao Gió', type: 'energy', stm: 8, ammo: 0, firerate: 15, ult_type: 'hurricane', dmg: 55 }, emp_missile: { name: '[ĐỘC NHẤT] Tên Lửa Điện', type: 'explosive', stm: 20, ammo: 1, firerate: 40, ult_type: 'orbital_strike', dmg: 90 }, toxic_bomb: { name: '[ĐỘC NHẤT] Bom Dịch Độc', type: 'explosive', stm: 15, ammo: 0, firerate: 30, ult_type: 'plague_cloud', dmg: 60 }, crystal_shield: { name: '[ĐỘC NHẤT] Khiên Pha Lê', type: 'defense', stm: 2, ammo: 0, firerate: 20, ult_type: 'crystal_prison', dmg: 0 }, flamethrower: { name: '[ĐỘC NHẤT] Súng Phun Lửa', type: 'energy', stm: 2, ammo: 1, firerate: 5, ult_type: 'inferno', dmg: 25 }, lightning_shuriken: { name: '[ĐỘC NHẤT] Phi Tiêu Điện', type: 'ballistic', stm: 5, ammo: 0, firerate: 10, ult_type: 'shadow_strike', dmg: 35 }, lightning_spear: { name: '[ĐỘC NHẤT] Giáo Sét', type: 'piercing', stm: 10, ammo: 0, firerate: 20, ult_type: 'thunder_wrath', dmg: 90 }, vampiric_sword: { name: '[ĐỘC NHẤT] Kiếm Hút Máu', type: 'melee', stm: 5, ammo: 0, firerate: 15, ult_type: 'blood_drain', dmg: 45 } };
 
-        // --- HỆ THỐNG CLASS & PHÂN QUYỀN VŨ KHÍ ---
         const classes = [
             { id: 1, name: "Kỵ Sĩ Mù", icon: "🛡️", color: "#bdc3c7", cd: 8, weapon: 'katana', ult: 'dragon_blade', allowed: ['katana', 'spear', 'energy_shield', 'giant_shield', 'dragon_blade'], desc: "<span class='class-q-skill'>[Q] Khiên Chống Trả:</span> Kháng ST 1.5s<br>⚔️ VK: Kiếm Katana | 💥 Ult: Kiếm Rồng" },
             { id: 2, name: "Sát Thủ Bóng Đêm", icon: "🗡️", color: "#8e44ad", cd: 5, weapon: 'shuriken', ult: 'void_scythe', allowed: ['shuriken', 'lightning_shuriken', 'void_scythe'], desc: "<span class='class-q-skill'>[Q] Lướt Bóng:</span> Xuyên qua Địch/Đạn<br>⚔️ VK: Phi Tiêu | 💥 Ult: Lưỡi Hái Hư Không" },
@@ -378,11 +375,30 @@
             { id: 9, name: "Lãng Khách Gió", icon: "🌪️", color: "#1abc9c", cd: 8, weapon: 'wind_blade', ult: 'hurricane', allowed: ['wind_blade', 'hurricane', 'katana'], desc: "<span class='class-q-skill'>[Q] Tường Gió:</span> Phóng Đao gió chậm<br>⚔️ VK: Đao Gió | 💥 Ult: Lốc Xoáy" },
             { id: 10, name: "Thời Không", icon: "⏳", color: "#3498db", cd: 15, weapon: 'plasma', ult: 'black_hole', allowed: ['plasma', 'laser', 'black_hole', 'bubble_spell', 'crystal_shield'], desc: "<span class='class-q-skill'>[Q] Đóng Băng:</span> Làm chậm vô hạn<br>⚔️ VK: Súng Plasma | 💥 Ult: Hố Đen" }
         ];
+
+        const dailyBosses = [ { id: 'fish', name: 'Cá Khổng Lồ', weapon: 'bubble_spell', color: '#0984e3', hint: 'Bong bóng màu sắc rực rỡ nhưng đừng để chạm vào! Bạn chỉ có 60 giây.' }, { id: 'worm', name: 'Giun Cát', weapon: 'earth_spike', color: '#e17055', hint: 'Cẩn thận khi nó lặn mất tăm, mặt đất sẽ rung chuyển!' }, { id: 'wind', name: 'Tinh Linh Gió', weapon: 'wind_blade', color: '#55efc4', hint: 'Tốc độ chém đao gió của nó là phi thường!' }, { id: 'spider', name: 'Nhện Máy', weapon: 'emp_missile', color: '#a29bfe', hint: 'Cảnh báo! Nó gọi vòng lôi nhắm từ trên không!' }, { id: 'toad', name: 'Cóc Độc', weapon: 'toxic_bomb', color: '#00b894', hint: 'Xả vùng độc tồn tại vĩnh viễn trên sân!' }, { id: 'golem', name: 'Golem Pha Lê', weapon: 'crystal_shield', color: '#81ecec', hint: 'Nó có thể bật khiên phản đòn lại bạn!' }, { id: 'bat', name: 'Dơi Lửa', weapon: 'flamethrower', color: '#d63031', hint: 'Bay lượn trên cao và nhả lửa liên tục!' }, { id: 'ninja', name: 'Ninja Bóng Tối', weapon: 'lightning_shuriken', color: '#2d3436', hint: 'Giật lùi về sau và phóng phi tiêu dồn dập!' }, { id: 'bird', name: 'Lôi Điểu', weapon: 'lightning_spear', color: '#fdcb6e', hint: 'Gọi sấm sét giật tung cả đấu trường!' }, { id: 'knight', name: 'Kỵ Sĩ Nguyền', weapon: 'vampiric_sword', color: '#6c5ce7', hint: 'Lướt áp sát bạn với những cú chém hút máu!' } ];
+
+        // --- GLOBAL STATE ---
+        let gameMode = ''; let currentBoss = 'normal'; let myRole = 'p1'; let currentRoom = null; let currentCoopType = ''; let oppClassId = 1;
+        let teammates = {}; let animationId; let attackCooldown = 0; let ultimateReady = true; let matchUltimateUsed = false;
+        let isLobbyHost = false; let isGameHost = false; 
+        let bo3Score = { p1: 0, p2: 0 }; let bossTimerInterval = null; 
+        let currentMapBuff = '';
         
+        let coins = parseInt(localStorage.getItem('coins')) || 0; let hearts = parseInt(localStorage.getItem('hearts')) || 0; let shards = parseInt(localStorage.getItem('shards')) || 0;
+        let unlocked = JSON.parse(localStorage.getItem('unlocked')) || {}; 
+        let currentEquip = localStorage.getItem('currentEquip') || 'none';
+        
+        document.getElementById('playerNameInput').value = localStorage.getItem('playerName') || '';
+        document.getElementById('coin-count').innerText = coins; document.getElementById('heart-count').innerText = hearts; document.getElementById('shard-count').innerText = shards;
+
+        let vipBossOffset = parseInt(localStorage.getItem('vipBossOffset')) || 0; let todayDateStr = new Date().toDateString(); let bossIndex = (new Date().getDate() + vipBossOffset) % 10; let currentDailyBoss = dailyBosses[bossIndex];
+
         let currentHeroIndex = parseInt(localStorage.getItem('currentHeroIndex')) || 0;
         let currentClassId = classes[currentHeroIndex].id;
         let customColors = JSON.parse(localStorage.getItem('customSkinColors')) || {};
 
+        // --- MENU FUNCTIONS ---
         function changeSkinColor(e) {
             customColors[currentClassId] = e.target.value;
             localStorage.setItem('customSkinColors', JSON.stringify(customColors));
@@ -426,7 +442,6 @@
             document.getElementById('color-picker').value = currentColor;
             renderClassUI(); 
             
-            // KIỂM TRA VK HIỆN TẠI CÓ HỢP LỆ VỚI CLASS KHÔNG
             if (currentEquip !== 'none' && !hero.allowed.includes(currentEquip)) {
                 equipItem('none'); 
             } else {
@@ -450,18 +465,9 @@
             document.getElementById('class-grid-container').innerHTML = html;
         }
 
-        const dailyBosses = [ { id: 'fish', name: 'Cá Khổng Lồ', weapon: 'bubble_spell', color: '#0984e3', hint: 'Bong bóng màu sắc rực rỡ nhưng đừng để chạm vào! Bạn chỉ có 60 giây.' }, { id: 'worm', name: 'Giun Cát', weapon: 'earth_spike', color: '#e17055', hint: 'Cẩn thận khi nó lặn mất tăm, mặt đất sẽ rung chuyển!' }, { id: 'wind', name: 'Tinh Linh Gió', weapon: 'wind_blade', color: '#55efc4', hint: 'Tốc độ chém đao gió của nó là phi thường!' }, { id: 'spider', name: 'Nhện Máy', weapon: 'emp_missile', color: '#a29bfe', hint: 'Cảnh báo! Nó gọi vòng lôi nhắm từ trên không!' }, { id: 'toad', name: 'Cóc Độc', weapon: 'toxic_bomb', color: '#00b894', hint: 'Xả vùng độc tồn tại vĩnh viễn trên sân!' }, { id: 'golem', name: 'Golem Pha Lê', weapon: 'crystal_shield', color: '#81ecec', hint: 'Nó có thể bật khiên phản đòn lại bạn!' }, { id: 'bat', name: 'Dơi Lửa', weapon: 'flamethrower', color: '#d63031', hint: 'Bay lượn trên cao và nhả lửa liên tục!' }, { id: 'ninja', name: 'Ninja Bóng Tối', weapon: 'lightning_shuriken', color: '#2d3436', hint: 'Giật lùi về sau và phóng phi tiêu dồn dập!' }, { id: 'bird', name: 'Lôi Điểu', weapon: 'lightning_spear', color: '#fdcb6e', hint: 'Gọi sấm sét giật tung cả đấu trường!' }, { id: 'knight', name: 'Kỵ Sĩ Nguyền', weapon: 'vampiric_sword', color: '#6c5ce7', hint: 'Lướt áp sát bạn với những cú chém hút máu!' } ];
-
-        let coins = parseInt(localStorage.getItem('coins')) || 0; let hearts = parseInt(localStorage.getItem('hearts')) || 0; let shards = parseInt(localStorage.getItem('shards')) || 0;
-        document.getElementById('playerNameInput').value = localStorage.getItem('playerName') || '';
-        document.getElementById('coin-count').innerText = coins; document.getElementById('heart-count').innerText = hearts; document.getElementById('shard-count').innerText = shards;
-
-        let vipBossOffset = parseInt(localStorage.getItem('vipBossOffset')) || 0; let todayDateStr = new Date().toDateString(); let bossIndex = (new Date().getDate() + vipBossOffset) % 10; let currentDailyBoss = dailyBosses[bossIndex];
-
         function openMerchantDialog() { switchScreen('screen-merchant'); let lastDefeated = localStorage.getItem('dailyBossDefeatedDate'); let btnFight = document.getElementById('btn-fight-daily'); document.getElementById('daily-boss-name').innerText = currentDailyBoss.name; document.getElementById('daily-boss-hint').innerText = "Gợi ý: " + currentDailyBoss.hint; let pName = document.getElementById('playerNameInput').value.trim().toLowerCase(); if (pName === 'thành' || pName === 'thanh') { document.getElementById('btn-vip-reset').style.display = 'inline-block'; } else { document.getElementById('btn-vip-reset').style.display = 'none'; } if (lastDefeated === todayDateStr) { document.getElementById('merchant-dialog-text').innerText = `"Khẹc khẹc... Ngươi đã hạ thủ con quái vật của ngày hôm nay rồi. Ta không còn mục tiêu nào cho ngươi nữa. Hãy quay lại vào ngày mai!"`; btnFight.innerText = "ĐÃ TIÊU DIỆT HÔM NAY"; btnFight.disabled = true; btnFight.style.background = "#555"; } else { document.getElementById('merchant-dialog-text').innerText = `"Khẹc khẹc... Chào lữ khách. Cố gắng sống sót nhé!"`; btnFight.innerText = "KHIÊU CHIẾN NGAY"; btnFight.disabled = false; btnFight.style.background = ""; } }
         function resetDailyBossVIP() { localStorage.removeItem('dailyBossDefeatedDate'); vipBossOffset++; localStorage.setItem('vipBossOffset', vipBossOffset); bossIndex = (new Date().getDate() + vipBossOffset) % 10; currentDailyBoss = dailyBosses[bossIndex]; alert("Đã dùng quyền năng VIP: Chuyển sang Boss Ngày tiếp theo!"); openMerchantDialog(); }
 
-        let dailyBossTimer = 0; 
         function startDailyBoss() {
             myRole = 'p1'; currentBoss = 'daily'; gameMode = 'daily_boss'; dailyBossTimer = 0; let myN = document.getElementById('playerNameInput').value || "Người Chơi"; setMap(3); initGame('daily_boss', myN, currentDailyBoss.name);
             let opp = getOpp(); opp.maxHp = 1500; opp.hp = opp.maxHp; document.getElementById('hp2-container').classList.add('boss-hp'); 
@@ -488,7 +494,6 @@
             
             let heroAllowed = classes.find(c => c.id === currentClassId).allowed;
 
-            // Gom tất cả item lại để render
             let allItems = { ...weapons, ...unique_weapons, ...ultimates };
 
             for(let key in allItems) {
@@ -496,12 +501,10 @@
                 let isAllowed = heroAllowed.includes(key);
                 let wName = allItems[key].name;
 
-                // Shop UI
                 if (weapons[key] || ultimates[key]) {
                     shopHtml += `<div class="shop-item"><span>${wName}</span> <span><b style="color:var(--neon-gold)">${allItems[key].price || '???'} V</b> <button class="btn btn-equip" style="background: ${isOwned ? '#333' : 'var(--neon-cyan)'}; border:none; color: ${isOwned ? '#fff' : '#000'}; width: 60px; display:inline-block;" onclick="buyItem('${key}', ${allItems[key].price || 9999})">${isOwned ? 'Đã có' : 'Mua'}</button></span></div>`;
                 }
 
-                // Inventory UI
                 if(isOwned) {
                     let isUlt = ultimates.hasOwnProperty(key);
                     let isUnique = unique_weapons.hasOwnProperty(key);
@@ -529,7 +532,6 @@
             currentEquip = item; localStorage.setItem('currentEquip', item);
             document.querySelectorAll('.btn-equip').forEach(btn => btn.classList.remove('active')); document.querySelectorAll(`#eq-${item}`).forEach(btn => btn.classList.add('active')); 
             
-            // Kích hoạt hiển thị đạn
             let atkKey = item === 'none' ? classes.find(c => c.id === currentClassId).weapon : item;
             let wData = weapons[atkKey] || ultimates[atkKey] || unique_weapons[atkKey];
             let hasAmmo = (wData && wData.ammo > 0);
@@ -539,8 +541,9 @@
         }
 
         document.getElementById('playerNameInput').addEventListener('input', function() { localStorage.setItem('playerName', this.value.trim()); });
-        updateMenuHero(); 
+        updateMenuHero(); // INIT FIRST UI STATE
 
+        // --- GAME PLAY ENGINE ---
         const groundY = 290; let entities = []; 
         const getP1StartX = () => 50; const getP2StartX = () => 650; const getP1StartDir = () => 1; const getP2StartDir = () => -1;
         
@@ -569,18 +572,15 @@
             if (bossTimerInterval) { clearInterval(bossTimerInterval); bossTimerInterval = null; }
             document.getElementById('game-over-screen-inner').style.display = 'none'; document.getElementById('btn-spectate').style.display = 'none';
             
-            // XÉT MÁU: 1000 NẾU PVP, 200 NẾU BOSS COOP/BOT
             let maxHealth = (gameMode === 'online') ? 1000 : 200;
             
             p1 = { x: getP1StartX(), y: groundY, vy: 0, hp: maxHealth, maxHp: maxHealth, stamina: 100, ammo: 30, isDead: false, isBlocking: false, jumpCount: 0, facingDir: getP1StartDir(), stunTimer: 0, isParrying: false, parryTimer: 0, statusEffects: { burn: 0, slow: 0, bleed: 0 }, qCooldown: 0, isInvulnerable: 0, damageBuff: 0, ammoTimer: 0 };
             p2 = { x: getP2StartX(), y: groundY, vy: 0, hp: maxHealth, maxHp: maxHealth, stamina: 100, ammo: 30, isDead: false, isBlocking: false, jumpCount: 0, facingDir: getP2StartDir(), stunTimer: 0, isParrying: false, parryTimer: 0, lockedTargetId: null, phase: 1, isBurrowed: false, statusEffects: { burn: 0, slow: 0, bleed: 0 }, qCooldown: 0, isInvulnerable: 0, damageBuff: 0, ammoTimer: 0 };
             
-            // Lấy giới hạn đạn của vũ khí hiện tại
             let atkKey = currentEquip === 'none' ? classes.find(c => c.id === currentClassId).weapon : currentEquip;
             let wData = weapons[atkKey] || ultimates[atkKey] || unique_weapons[atkKey];
             if (wData && wData.ammo > 0) p1.ammo = wData.ammo;
             
-            // XÓA SẠCH SẼ TÀN DƯ CỦA TRẬN TRƯỚC
             document.querySelectorAll('.dash-ghost, .weapon-cast, .effect-text, .slash-arc, .bomb-explode, .shockwave, .heal-aura, .heal-beam, .boss_melee, .plasma_bullet, .holy_light, .storm_arrow, .bullet, .rock, .boulder, .tornado, .bomb, .grenade, .shuriken, .shotgun_bullet, .sniper_bullet, .fireball, .rocket, .laser, .shield_aura, .giant_shield_aura, .vine, .horse_charge, .meteor, .bubble, .wind_blade, .plague_cloud, .lightning_strike, .blood_drain_beam, .earth-spike, .acid-bomb, .acid-pool, .target-ring, .ult_divine, .omega_beam, .dragon_wave, .black_hole, .void_slash, .ult_slash, .ult_nuke').forEach(e => e.remove());
             document.getElementById('teammates-container').innerHTML = ''; teammates = {};
             entities = []; ultimateReady = true; keys.space = false;
@@ -620,7 +620,6 @@
             if(ammoUi1) ammoUi1.style.display = hasAmmoCheck ? 'block' : 'none'; if(ammoUi2) ammoUi2.style.display = hasAmmoCheck ? 'block' : 'none';
         }
 
-        // HÀM REMATCH
         function rematchBoss() { if (gameMode === 'bot') startBotMode(currentBoss); else if (gameMode === 'daily_boss') startDailyBoss(); else if (gameMode === 'coop') switchScreen('screen-boss'); }
         function requestRematchPvP() { startOnlineMode(); }
 
