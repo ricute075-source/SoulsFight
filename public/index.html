@@ -10,7 +10,7 @@
         /* SCROLLBAR & OVERLAYS */
         ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-thumb { background: var(--neon-cyan); border-radius: 10px; }
         .fullscreen-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(11, 12, 16, 0.95); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(8px); }
-        .panel { background: rgba(15, 20, 25, 0.95); padding: 25px; border-radius: 12px; border: 2px solid var(--neon-cyan); text-align: center; width: 90%; max-width: 750px; max-height: 95vh; overflow-y: auto; box-shadow: 0 0 30px rgba(102, 252, 241, 0.2); display: flex; flex-direction: column; align-items: center;}
+        .panel { background: rgba(15, 20, 25, 0.95); padding: 25px; border-radius: 12px; border: 2px solid var(--neon-cyan); text-align: center; width: 90%; max-width: 680px; max-height: 95vh; overflow-y: auto; box-shadow: 0 0 30px rgba(102, 252, 241, 0.2); display: flex; flex-direction: column; align-items: center;}
         
         .title-glow { color: var(--neon-cyan); margin-top: 0; letter-spacing: 4px; text-transform: uppercase; text-shadow: 0 0 15px var(--neon-cyan); }
         .input-name { padding: 12px; font-size: 16px; border-radius: 6px; border: 1px solid var(--neon-cyan); background: #1f2833; color: var(--neon-cyan); margin-bottom: 15px; width: 80%; text-align: center; font-weight: bold; text-transform: uppercase; outline: none; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);}
@@ -359,21 +359,21 @@
             giant_shield: { name: 'Khiên Khổng Lồ', price: 1500, type: 'defense_aoe', stm: 25, ammo: 0, firerate: 50 } 
         };
 
-        const ultimates = { dragon_blade: { name: '[VIP] Kiếm Rồng', type: 'energy', stm: 20, ammo: 0, firerate: 45, dmg: 75 }, gravity_hammer: { name: '[VIP] Búa Trọng Lực', type: 'explosive', stm: 10, ammo: 0, firerate: 25, dmg: 65 }, storm_bow: { name: '[VIP] Cung Bão Tố', type: 'ballistic', stm: 5, ammo: 0, firerate: 10 }, void_scythe: { name: '[VIP] Lưỡi Hái Hư Không', type: 'piercing', stm: 10, ammo: 0, firerate: 20 }, omega_beam: { name: '[MAX] TIA OMEGA', type: 'energy', stm: 30, ammo: 0, firerate: 60, dmg: 110 } };
+        const ultimates = { dragon_blade: { name: '[VIP] Kiếm Rồng', price: 2000, type: 'energy', stm: 20, ammo: 0, firerate: 45, dmg: 75 }, gravity_hammer: { name: '[VIP] Búa Trọng Lực', price: 2000, type: 'explosive', stm: 10, ammo: 0, firerate: 25, dmg: 65 }, storm_bow: { name: '[VIP] Cung Bão Tố', price: 2000, type: 'ballistic', stm: 5, ammo: 0, firerate: 10 }, void_scythe: { name: '[VIP] Lưỡi Hái Hư Không', price: 2000, type: 'piercing', stm: 10, ammo: 0, firerate: 20 }, omega_beam: { name: '[MAX] TIA OMEGA', price: 3000, type: 'energy', stm: 30, ammo: 0, firerate: 60, dmg: 110 } };
         const unique_weapons = { bubble_spell: { name: '[ĐỘC NHẤT] Phép Bong Bóng', type: 'magic', stm: 10, ammo: 0, firerate: 25, ult_type: 'bubble_prison', dmg: 60 }, earth_spike: { name: '[ĐỘC NHẤT] Chông Đất', type: 'piercing', stm: 12, ammo: 0, firerate: 25, ult_type: 'earth_shatter', dmg: 75 }, wind_blade: { name: '[ĐỘC NHẤT] Đao Gió', type: 'energy', stm: 8, ammo: 0, firerate: 15, ult_type: 'hurricane', dmg: 55 }, emp_missile: { name: '[ĐỘC NHẤT] Tên Lửa Điện', type: 'explosive', stm: 20, ammo: 1, firerate: 40, ult_type: 'orbital_strike', dmg: 90 }, toxic_bomb: { name: '[ĐỘC NHẤT] Bom Dịch Độc', type: 'explosive', stm: 15, ammo: 0, firerate: 30, ult_type: 'plague_cloud', dmg: 60 }, crystal_shield: { name: '[ĐỘC NHẤT] Khiên Pha Lê', type: 'defense', stm: 2, ammo: 0, firerate: 20, ult_type: 'crystal_prison', dmg: 0 }, flamethrower: { name: '[ĐỘC NHẤT] Súng Phun Lửa', type: 'energy', stm: 2, ammo: 1, firerate: 5, ult_type: 'inferno', dmg: 25 }, lightning_shuriken: { name: '[ĐỘC NHẤT] Phi Tiêu Điện', type: 'ballistic', stm: 5, ammo: 0, firerate: 10, ult_type: 'shadow_strike', dmg: 35 }, lightning_spear: { name: '[ĐỘC NHẤT] Giáo Sét', type: 'piercing', stm: 10, ammo: 0, firerate: 20, ult_type: 'thunder_wrath', dmg: 90 }, vampiric_sword: { name: '[ĐỘC NHẤT] Kiếm Hút Máu', type: 'melee', stm: 5, ammo: 0, firerate: 15, ult_type: 'blood_drain', dmg: 45 } };
 
         // --- HỆ THỐNG CLASS & PHÂN QUYỀN VŨ KHÍ ---
         const classes = [
             { id: 1, name: "Kỵ Sĩ Mù", icon: "🛡️", color: "#bdc3c7", cd: 8, desc: "<span class='class-q-skill'>[Q] Khiên Chống Trả:</span> Kháng sát thương 1.5s.", allowed: ['katana', 'spear', 'energy_shield', 'giant_shield', 'dragon_blade'] },
             { id: 2, name: "Sát Thủ Bóng Đêm", icon: "🗡️", color: "#8e44ad", cd: 5, desc: "<span class='class-q-skill'>[Q] Lướt Bóng:</span> Xuyên qua Địch/Đạn.", allowed: ['shuriken', 'lightning_shuriken', 'void_scythe'] },
-            { id: 3, name: "Cuồng Chiến Sĩ", icon: "🪓", color: "#e74c3c", cd: 10, desc: "<span class='class-q-skill'>[Q] Huyết Nộ:</span> Rút máu đổi sát thương.", allowed: ['vampiric_sword', 'gravity_hammer', 'horse'] },
+            { id: 3, name: "Cuồng Chiến Sĩ", icon: "🪓", color: "#e74c3c", cd: 10, desc: "<span class='class-q-skill'>[Q] Huyết Nộ:</span> Rút máu đổi sát thương.", allowed: ['vampiric_sword', 'gravity_hammer', 'horse', 'katana'] },
             { id: 4, name: "Xạ Thủ", icon: "🏹", color: "#9b59b6", cd: 6, desc: "<span class='class-q-skill'>[Q] Cú Nhảy Không Gian:</span> Giật lùi + Rải mìn.", allowed: ['sniper', 'heavy_pistol', 'shotgun', 'storm_bow', 'lightning_spear'] },
             { id: 5, name: "Pháp Sư", icon: "🔥", color: "#e67e22", cd: 8, desc: "<span class='class-q-skill'>[Q] Thiên Lôi:</span> Gọi Sét từ trên cao.", allowed: ['fireball', 'flamethrower', 'omega_beam'] },
-            { id: 6, name: "Tu Sĩ", icon: "✝️", color: "#f1c40f", cd: 12, desc: "<span class='class-q-skill'>[Q] Vùng Đất Thánh:</span> Aura Hồi Máu.", allowed: ['holy_light', 'heal_single', 'heal_aoe'] },
+            { id: 6, name: "Tu Sĩ", icon: "✝️", color: "#f1c40f", cd: 12, desc: "<span class='class-q-skill'>[Q] Vùng Đất Thánh:</span> Aura Hồi Máu.", allowed: ['holy_light', 'heal_single', 'heal_aoe', 'energy_shield'] },
             { id: 7, name: "Huyết Quỷ", icon: "🩸", color: "#c0392b", cd: 10, desc: "<span class='class-q-skill'>[Q] Vụ Nổ Máu:</span> Nổ AoE + Hút máu.", allowed: ['vampiric_sword', 'blood_drain'] },
             { id: 8, name: "Kỹ Sư Cơ Khí", icon: "⚙️", color: "#7f8c8d", cd: 8, desc: "<span class='class-q-skill'>[Q] Bom Hóa Học:</span> Ném Vũng Axit dính sát thương.", allowed: ['rocket', 'grenade', 'cluster', 'bomb', 'smg', 'emp_missile'] },
             { id: 9, name: "Lãng Khách Gió", icon: "🌪️", color: "#1abc9c", cd: 8, desc: "<span class='class-q-skill'>[Q] Tường Gió:</span> Phóng Đao gió chậm, đẩy lùi đạn.", allowed: ['wind_blade', 'hurricane', 'katana'] },
-            { id: 10, name: "Thời Không", icon: "⏳", color: "#3498db", cd: 15, desc: "<span class='class-q-skill'>[Q] Đóng Băng:</span> Làm chậm vô hạn đối phương.", allowed: ['plasma', 'laser', 'black_hole'] }
+            { id: 10, name: "Thời Không", icon: "⏳", color: "#3498db", cd: 15, desc: "<span class='class-q-skill'>[Q] Đóng Băng:</span> Làm chậm vô hạn đối phương.", allowed: ['plasma', 'laser', 'black_hole', 'bubble_spell', 'crystal_shield'] }
         ];
         
         let currentHeroIndex = parseInt(localStorage.getItem('currentHeroIndex')) || 0;
@@ -489,7 +489,7 @@
             let allItems = { ...weapons, ...unique_weapons, ...ultimates };
 
             for(let key in allItems) {
-                let isOwned = unlocked[key] || weapons[key]; // Vũ khí thường mặc định có, Unique/Ulti cần mua/nhặt
+                let isOwned = unlocked[key] || weapons.hasOwnProperty(key); // Vũ khí thường mặc định có, Unique/Ulti cần mua/nhặt
                 let isAllowed = heroAllowed.includes(key);
                 let wName = allItems[key].name;
 
@@ -500,8 +500,10 @@
 
                 // Inventory UI
                 if(isOwned) {
-                    let typeLabel = ultimates[key] ? 'ULTIMATE' : (unique_weapons[key] ? 'ĐỘC NHẤT' : 'THƯỜNG');
-                    let colorStyle = ultimates[key] ? 'color:var(--neon-gold); border-color:var(--neon-gold);' : (unique_weapons[key] ? 'color:var(--neon-purple); border-color:var(--neon-purple);' : '');
+                    let isUlt = ultimates.hasOwnProperty(key);
+                    let isUnique = unique_weapons.hasOwnProperty(key);
+                    let typeLabel = isUlt ? 'ULTIMATE' : (isUnique ? 'ĐỘC NHẤT' : 'THƯỜNG');
+                    let colorStyle = isUlt ? 'color:var(--neon-gold); border-color:var(--neon-gold);' : (isUnique ? 'color:var(--neon-purple); border-color:var(--neon-purple);' : '');
                     
                     let disableClass = isAllowed ? '' : 'disabled';
                     let btnText = isAllowed ? wName : '❌ SAI CLASS';
@@ -679,6 +681,7 @@
             if(gameMode !== 'online') return; 
             let opp = getOpp(); opp.x = oppData.x; opp.y = oppData.y; opp.isBlocking = oppData.isBlocking; if (oppData.facingDir) opp.facingDir = oppData.facingDir; oppVisual().classList.toggle('blocking', opp.isBlocking); 
             
+            // ĐỒNG BỘ SKIN ĐỐI THỦ P2 (Chuẩn xác 100%)
             if (oppData.classId && oppData.classId !== oppClassId) {
                 oppClassId = oppData.classId;
                 if (!opp.isDead) {
@@ -690,6 +693,7 @@
                     }
                 }
             }
+            // Fix gửi socket chết cho đồng đội
             if (oppData.isDead !== undefined) { opp.isDead = oppData.isDead; if (opp.isDead) oppWrapper().classList.add('dead'); }
         });
 
@@ -853,7 +857,7 @@
                 if(atkKey === 'gravity_hammer') spawnAndSend('shockwave', 0, groundY+70, 0, 0);
 
                 let dmg = atkKey === 'dragon_blade' ? 75 : (atkKey === 'gravity_hammer' ? 65 : (atkKey === 'vampiric_sword' ? 45 : (atkKey === 'katana' ? 35 : (atkKey === 'spear' ? 30 : 15)))); 
-                if(me.damageBuff > 0) dmg = Math.floor(dmg * 1.5); 
+                if(me.damageBuff > 0) dmg = Math.floor(dmg * 1.5); // Áp dụng nộ
 
                 let range = (atkKey === 'spear' || atkKey === 'dragon_blade') ? 180 : (atkKey === 'katana' ? 120 : 70);
                 let wEffect = 'bleed'; if (atkKey === 'gravity_hammer') wEffect = 'slow'; if (atkKey === 'dragon_blade') wEffect = 'burn';
@@ -910,7 +914,7 @@
             if(target.isDead) return;
             
             if (target === p2 && target.isBurrowed) return;
-            if (target.isInvulnerable > 0) return; 
+            if (target.isInvulnerable > 0) return; // Miễn sát thương từ Q
 
             if (target === p2 && type !== 'magic' && document.getElementById('p2-vis').classList.contains('reflecting')) {
                 handleDamage(getMe(), dmg, type, false, effect, isHeadshot); return;
@@ -942,6 +946,7 @@
             if (effect === 'slow') { target.statusEffects.slow = 120; showFloatingText(target.x, target.y, "Chậm!", 'status-text'); tVis.classList.add('status-slow'); }
             if (effect === 'bleed') { target.statusEffects.bleed = 240; showFloatingText(target.x, target.y, "Mất Máu!", 'status-text'); tVis.classList.add('status-bleed'); }
 
+            // HIT STOP Visual
             tVis.classList.add('hit-stop'); setTimeout(() => tVis.classList.remove('hit-stop'), 50);
             showFloatingText(target.x + 30, target.y - 20, "-"+Math.floor(actualDmg), isHeadshot ? 'dmg-crit' : 'dmg-text');
 
@@ -1037,6 +1042,7 @@
                 
                 let target = (e.isMine || e.isAlly) ? getOpp() : getMe();
 
+                // CÁC KỸ NĂNG ULTIMATE CHẠM
                 if (e.type === 'dragon_wave') {
                     if(e.age > 60) { e.el.remove(); entities.splice(i, 1); continue; }
                     if (Math.abs(e.x - target.x) < 100 && Math.abs(e.y - target.y) < 150 && !target.isDead && !e.hasHit) { e.hasHit = true; let dWaveDmg = 150; if(e.isMine && gameMode==='online') socket.emit('playerHit', {roomId: currentRoom, damage: dWaveDmg, type: 'energy', effect: 'burn'}); if(e.isMine && (gameMode==='coop' || gameMode==='daily_boss')) socket.emit('hitCoopBoss', dWaveDmg); if(e.isMine || (!e.isMine && gameMode!=='online')) handleDamage(target, dWaveDmg, 'energy', e.isMine, 'burn'); } continue;
