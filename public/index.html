@@ -263,6 +263,8 @@
             <button class="btn btn-merchant" onclick="openMerchantDialog()">THƯƠNG NHÂN BÍ ẨN (BOSS NGÀY)</button>
             <button class="btn btn-boss" style="border-color:#e17055; color:#e17055;" onclick="openCoopBoss()">KHIÊU CHIẾN BOSS CO-OP</button>
             <button class="btn btn-world" onclick="showCoopLobby('world')">BOSS THẾ GIỚI</button>
+            
+            <button class="btn" style="background:#2d3436; border-color:#636e72; color: #fff;" onclick="switchScreen('screen-shop')">TIỆM RÈN KHÍ TÀI</button>
         </div>
     </div>
 
@@ -270,6 +272,7 @@
     <div id="screen-boss" class="fullscreen-overlay"><div class="panel panel-red"><h2 id="boss-title" style="color: var(--neon-red); text-shadow: 0 0 10px var(--neon-red); margin-top:0;">CHỌN LÃNH ĐỊA</h2><button class="btn" onclick="selectBoss('titan')">TITAN</button><button class="btn" onclick="selectBoss('zephyr')">ZEPHYR</button><button class="btn" onclick="selectBoss('ifrit')">IFRIT</button><button class="btn" onclick="selectBoss('shadow')">SHADOW</button><button class="btn" style="border-color:var(--neon-gold); color:var(--neon-gold);" onclick="selectBoss('omega')">OMEGA</button><button class="btn" style="background: #2d3436; border-color:#636e72; margin-top:15px; color:#fff;" onclick="switchScreen('screen-menu')">TRỞ VỀ</button></div></div>
     <div id="screen-waiting" class="fullscreen-overlay"><div class="panel"><h2 class="wait-title" id="wait-msg">ĐANG TÌM ĐỐI THỦ...</h2><div class="loader"></div><button class="btn btn-world" id="btn-start-early" style="display:none;" onclick="socket.emit('startCoopEarly', currentCoopType);">VÀO ĐÁNH LUÔN</button><button class="btn btn-boss" id="btn-urge-host" style="display:none;" onclick="urgeHost()">BẮT ĐẦU ĐI!</button><button class="btn" style="background: #2d3436; border-color:#636e72; margin-top: 20px; color:#fff;" onclick="cancelMatchmaking()">HỦY & TRỞ VỀ</button></div></div>
     <div id="screen-round" class="fullscreen-overlay"><div class="panel"><h2 class="wait-title" id="round-msg">HẾT HIỆP 1</h2><button class="btn" id="btn-ready-round" style="background:var(--neon-cyan); color:var(--bg-dark); font-size: 16px;" onclick="readyNextRound()">SẴN SÀNG</button></div></div>
+    <div id="screen-shop" class="fullscreen-overlay"><div class="panel" style="max-width: 650px;"><h2 style="color: var(--neon-cyan); margin-top: 0;">CHỢ ĐEN VŨ KHÍ</h2><div class="stats-bar">VÀNG HIỆN CÓ: <span id="shop-coin-count">0</span></div><div id="shop-list" style="display: flex; flex-direction: column; width: 100%; gap: 10px;"></div><button class="btn" style="background: #2d3436; border-color:#636e72; margin-top: 15px; color:#fff;" onclick="switchScreen('screen-menu')">QUAY LẠI</button></div></div>
 
     <div id="game-container">
         <div class="game-wrapper">
@@ -364,16 +367,16 @@
 
         // --- HỆ THỐNG CLASS & PHÂN QUYỀN VŨ KHÍ ---
         const classes = [
-            { id: 1, name: "Kỵ Sĩ Mù", icon: "🛡️", color: "#bdc3c7", cd: 8, desc: "<span class='class-q-skill'>[Q] Khiên Chống Trả:</span> Kháng sát thương 1.5s.", allowed: ['katana', 'spear', 'energy_shield', 'giant_shield', 'dragon_blade'] },
-            { id: 2, name: "Sát Thủ Bóng Đêm", icon: "🗡️", color: "#8e44ad", cd: 5, desc: "<span class='class-q-skill'>[Q] Lướt Bóng:</span> Xuyên qua Địch/Đạn.", allowed: ['shuriken', 'lightning_shuriken', 'void_scythe'] },
-            { id: 3, name: "Cuồng Chiến Sĩ", icon: "🪓", color: "#e74c3c", cd: 10, desc: "<span class='class-q-skill'>[Q] Huyết Nộ:</span> Rút máu đổi sát thương.", allowed: ['vampiric_sword', 'gravity_hammer', 'horse', 'katana'] },
-            { id: 4, name: "Xạ Thủ", icon: "🏹", color: "#9b59b6", cd: 6, desc: "<span class='class-q-skill'>[Q] Cú Nhảy Không Gian:</span> Giật lùi + Rải mìn.", allowed: ['sniper', 'heavy_pistol', 'shotgun', 'storm_bow', 'lightning_spear'] },
-            { id: 5, name: "Pháp Sư", icon: "🔥", color: "#e67e22", cd: 8, desc: "<span class='class-q-skill'>[Q] Thiên Lôi:</span> Gọi Sét từ trên cao.", allowed: ['fireball', 'flamethrower', 'omega_beam'] },
-            { id: 6, name: "Tu Sĩ", icon: "✝️", color: "#f1c40f", cd: 12, desc: "<span class='class-q-skill'>[Q] Vùng Đất Thánh:</span> Aura Hồi Máu.", allowed: ['holy_light', 'heal_single', 'heal_aoe', 'energy_shield'] },
-            { id: 7, name: "Huyết Quỷ", icon: "🩸", color: "#c0392b", cd: 10, desc: "<span class='class-q-skill'>[Q] Vụ Nổ Máu:</span> Nổ AoE + Hút máu.", allowed: ['vampiric_sword', 'blood_drain'] },
-            { id: 8, name: "Kỹ Sư Cơ Khí", icon: "⚙️", color: "#7f8c8d", cd: 8, desc: "<span class='class-q-skill'>[Q] Bom Hóa Học:</span> Ném Vũng Axit dính sát thương.", allowed: ['rocket', 'grenade', 'cluster', 'bomb', 'smg', 'emp_missile'] },
-            { id: 9, name: "Lãng Khách Gió", icon: "🌪️", color: "#1abc9c", cd: 8, desc: "<span class='class-q-skill'>[Q] Tường Gió:</span> Phóng Đao gió chậm, đẩy lùi đạn.", allowed: ['wind_blade', 'hurricane', 'katana'] },
-            { id: 10, name: "Thời Không", icon: "⏳", color: "#3498db", cd: 15, desc: "<span class='class-q-skill'>[Q] Đóng Băng:</span> Làm chậm vô hạn đối phương.", allowed: ['plasma', 'laser', 'black_hole', 'bubble_spell', 'crystal_shield'] }
+            { id: 1, name: "Kỵ Sĩ Mù", icon: "🛡️", color: "#bdc3c7", cd: 8, weapon: 'katana', ult: 'dragon_blade', allowed: ['katana', 'spear', 'energy_shield', 'giant_shield', 'dragon_blade'], desc: "<span class='class-q-skill'>[Q] Khiên Chống Trả:</span> Kháng ST 1.5s<br>⚔️ VK: Kiếm Katana | 💥 Ult: Kiếm Rồng" },
+            { id: 2, name: "Sát Thủ Bóng Đêm", icon: "🗡️", color: "#8e44ad", cd: 5, weapon: 'shuriken', ult: 'void_scythe', allowed: ['shuriken', 'lightning_shuriken', 'void_scythe'], desc: "<span class='class-q-skill'>[Q] Lướt Bóng:</span> Xuyên qua Địch/Đạn<br>⚔️ VK: Phi Tiêu | 💥 Ult: Lưỡi Hái Hư Không" },
+            { id: 3, name: "Cuồng Chiến Sĩ", icon: "🪓", color: "#e74c3c", cd: 10, weapon: 'vampiric_sword', ult: 'gravity_hammer', allowed: ['vampiric_sword', 'gravity_hammer', 'horse', 'katana'], desc: "<span class='class-q-skill'>[Q] Huyết Nộ:</span> Mất máu đổi sát thương<br>⚔️ VK: Kiếm Hút Máu | 💥 Ult: Búa Trọng Lực" },
+            { id: 4, name: "Xạ Thủ", icon: "🏹", color: "#9b59b6", cd: 6, weapon: 'sniper', ult: 'storm_bow', allowed: ['sniper', 'heavy_pistol', 'shotgun', 'storm_bow', 'lightning_spear'], desc: "<span class='class-q-skill'>[Q] Lùi Bắn:</span> Giật lùi + Rải mìn<br>⚔️ VK: Súng Ngắm | 💥 Ult: Cung Bão Tố" },
+            { id: 5, name: "Pháp Sư", icon: "🔥", color: "#e67e22", cd: 8, weapon: 'fireball', ult: 'omega_beam', allowed: ['fireball', 'flamethrower', 'omega_beam'], desc: "<span class='class-q-skill'>[Q] Thiên Lôi:</span> Gọi Sét từ trên cao<br>⚔️ VK: Cầu Lửa | 💥 Ult: Tia Omega" },
+            { id: 6, name: "Tu Sĩ", icon: "✝️", color: "#f1c40f", cd: 12, weapon: 'holy_light', ult: 'heal_aoe', allowed: ['holy_light', 'heal_single', 'heal_aoe', 'energy_shield'], desc: "<span class='class-q-skill'>[Q] Vùng Đất Thánh:</span> Aura Hồi Máu<br>⚔️ VK: Ánh Sáng Thần | 💥 Ult: Trượng Hồi Phục" },
+            { id: 7, name: "Huyết Quỷ", icon: "🩸", color: "#c0392b", cd: 10, weapon: 'vampiric_sword', ult: 'blood_drain', allowed: ['vampiric_sword', 'blood_drain'], desc: "<span class='class-q-skill'>[Q] Vụ Nổ Máu:</span> Nổ AoE + Hút máu<br>⚔️ VK: Kiếm Hút Máu | 💥 Ult: Rút Máu" },
+            { id: 8, name: "Kỹ Sư Cơ Khí", icon: "⚙️", color: "#7f8c8d", cd: 8, weapon: 'rocket', ult: 'emp_missile', allowed: ['rocket', 'grenade', 'cluster', 'bomb', 'smg', 'emp_missile'], desc: "<span class='class-q-skill'>[Q] Bom Hóa Học:</span> Ném Vũng Độc<br>⚔️ VK: Bazooka | 💥 Ult: Tên Lửa Điện" },
+            { id: 9, name: "Lãng Khách Gió", icon: "🌪️", color: "#1abc9c", cd: 8, weapon: 'wind_blade', ult: 'hurricane', allowed: ['wind_blade', 'hurricane', 'katana'], desc: "<span class='class-q-skill'>[Q] Tường Gió:</span> Phóng Đao gió chậm<br>⚔️ VK: Đao Gió | 💥 Ult: Lốc Xoáy" },
+            { id: 10, name: "Thời Không", icon: "⏳", color: "#3498db", cd: 15, weapon: 'plasma', ult: 'black_hole', allowed: ['plasma', 'laser', 'black_hole', 'bubble_spell', 'crystal_shield'], desc: "<span class='class-q-skill'>[Q] Đóng Băng:</span> Làm chậm vô hạn<br>⚔️ VK: Súng Plasma | 💥 Ult: Hố Đen" }
         ];
         
         let currentHeroIndex = parseInt(localStorage.getItem('currentHeroIndex')) || 0;
@@ -425,9 +428,9 @@
             
             // KIỂM TRA VK HIỆN TẠI CÓ HỢP LỆ VỚI CLASS KHÔNG
             if (currentEquip !== 'none' && !hero.allowed.includes(currentEquip)) {
-                equipItem('none'); // Tự tháo VK nếu chuyển sang class ko dùng đc
+                equipItem('none'); 
             } else {
-                renderShopAndInventory(); // Render lại kho vũ khí để làm mờ đồ sai class
+                renderShopAndInventory(); 
             }
         }
 
@@ -481,7 +484,7 @@
         // RENDER KHO VŨ KHÍ CÓ LỌC THEO CLASS
         function renderShopAndInventory() {
             let shopHtml = ''; 
-            let invHtml = '<div><button class="btn btn-equip" id="eq-none" onclick="equipItem(\'none\')">TAY KHÔNG</button></div> ';
+            let invHtml = '<div><button class="btn btn-equip" id="eq-none" onclick="equipItem(\'none\')">VŨ KHÍ MẶC ĐỊNH CLASS</button></div> ';
             
             let heroAllowed = classes.find(c => c.id === currentClassId).allowed;
 
@@ -489,7 +492,7 @@
             let allItems = { ...weapons, ...unique_weapons, ...ultimates };
 
             for(let key in allItems) {
-                let isOwned = unlocked[key] || weapons.hasOwnProperty(key); // Vũ khí thường mặc định có, Unique/Ulti cần mua/nhặt
+                let isOwned = unlocked[key] || weapons.hasOwnProperty(key); 
                 let isAllowed = heroAllowed.includes(key);
                 let wName = allItems[key].name;
 
@@ -520,20 +523,23 @@
         function equipItem(item) {
             if (item !== 'none') {
                 let heroAllowed = classes.find(c => c.id === currentClassId).allowed;
-                if (!heroAllowed.includes(item)) return; // Khóa không cho trang bị
+                if (!heroAllowed.includes(item)) return; 
             }
 
             currentEquip = item; localStorage.setItem('currentEquip', item);
             document.querySelectorAll('.btn-equip').forEach(btn => btn.classList.remove('active')); document.querySelectorAll(`#eq-${item}`).forEach(btn => btn.classList.add('active')); 
             
-            let wData = weapons[item] || ultimates[item] || unique_weapons[item]; let hasAmmo = (wData && wData.ammo > 0);
+            // Kích hoạt hiển thị đạn
+            let atkKey = item === 'none' ? classes.find(c => c.id === currentClassId).weapon : item;
+            let wData = weapons[atkKey] || ultimates[atkKey] || unique_weapons[atkKey];
+            let hasAmmo = (wData && wData.ammo > 0);
             let ammoUi1 = document.getElementById('ammo-ui'); let ammoUi2 = document.getElementById('ammo-ui2');
             if(ammoUi1) ammoUi1.style.display = hasAmmo ? 'block' : 'none'; if(ammoUi2) ammoUi2.style.display = hasAmmo ? 'block' : 'none';
             document.querySelectorAll('button').forEach(b => b.blur());
         }
 
         document.getElementById('playerNameInput').addEventListener('input', function() { localStorage.setItem('playerName', this.value.trim()); });
-        updateMenuHero(); // Khởi tạo UI lần đầu
+        updateMenuHero(); 
 
         const groundY = 290; let entities = []; 
         const getP1StartX = () => 50; const getP2StartX = () => 650; const getP1StartDir = () => 1; const getP2StartDir = () => -1;
@@ -563,14 +569,15 @@
             if (bossTimerInterval) { clearInterval(bossTimerInterval); bossTimerInterval = null; }
             document.getElementById('game-over-screen-inner').style.display = 'none'; document.getElementById('btn-spectate').style.display = 'none';
             
-            // XÉT MÁU: 1000 NẾU PVP, 200 NẾU BOSS COOP
+            // XÉT MÁU: 1000 NẾU PVP, 200 NẾU BOSS COOP/BOT
             let maxHealth = (gameMode === 'online') ? 1000 : 200;
             
             p1 = { x: getP1StartX(), y: groundY, vy: 0, hp: maxHealth, maxHp: maxHealth, stamina: 100, ammo: 30, isDead: false, isBlocking: false, jumpCount: 0, facingDir: getP1StartDir(), stunTimer: 0, isParrying: false, parryTimer: 0, statusEffects: { burn: 0, slow: 0, bleed: 0 }, qCooldown: 0, isInvulnerable: 0, damageBuff: 0, ammoTimer: 0 };
             p2 = { x: getP2StartX(), y: groundY, vy: 0, hp: maxHealth, maxHp: maxHealth, stamina: 100, ammo: 30, isDead: false, isBlocking: false, jumpCount: 0, facingDir: getP2StartDir(), stunTimer: 0, isParrying: false, parryTimer: 0, lockedTargetId: null, phase: 1, isBurrowed: false, statusEffects: { burn: 0, slow: 0, bleed: 0 }, qCooldown: 0, isInvulnerable: 0, damageBuff: 0, ammoTimer: 0 };
             
             // Lấy giới hạn đạn của vũ khí hiện tại
-            let wData = weapons[currentEquip] || ultimates[currentEquip] || unique_weapons[currentEquip];
+            let atkKey = currentEquip === 'none' ? classes.find(c => c.id === currentClassId).weapon : currentEquip;
+            let wData = weapons[atkKey] || ultimates[atkKey] || unique_weapons[atkKey];
             if (wData && wData.ammo > 0) p1.ammo = wData.ammo;
             
             // XÓA SẠCH SẼ TÀN DƯ CỦA TRẬN TRƯỚC
@@ -592,13 +599,12 @@
             p1Vis.className = 'player-visual'; p2Vis.className = 'player-visual';
             p1Vis.removeAttribute('style'); p2Vis.removeAttribute('style');
             
-            // CẤP PHÁT CLASS CSS SẠCH SẼ MỚI
             p1Vis.classList.add('visual-c' + currentClassId);
             applyColorToVisual(p1Vis, currentClassId);
             
             if (gameMode === 'online') {
                 p2Vis.classList.add('visual-c' + oppClassId);
-                applyColorToVisual(p2Vis, oppClassId); // Fallback color until socket sync
+                applyColorToVisual(p2Vis, oppClassId); 
             } else if (gameMode === 'bot' || gameMode === 'coop' || gameMode === 'daily_boss') {
                 if (gameMode !== 'daily_boss') p2Vis.classList.add('boss-' + currentBoss);
             }
@@ -609,7 +615,6 @@
             let stm1El = document.getElementById('stm1'); let stm2El = document.getElementById('stm2');
             if (stm1El) stm1El.style.width = '100%'; if (stm2El) stm2El.style.width = '100%';
 
-            // Kích hoạt Ammo UI nếu vũ khí Class dùng đạn
             let hasAmmoCheck = (wData && wData.ammo > 0);
             let ammoUi1 = document.getElementById('ammo-ui'); let ammoUi2 = document.getElementById('ammo-ui2');
             if(ammoUi1) ammoUi1.style.display = hasAmmoCheck ? 'block' : 'none'; if(ammoUi2) ammoUi2.style.display = hasAmmoCheck ? 'block' : 'none';
@@ -681,7 +686,6 @@
             if(gameMode !== 'online') return; 
             let opp = getOpp(); opp.x = oppData.x; opp.y = oppData.y; opp.isBlocking = oppData.isBlocking; if (oppData.facingDir) opp.facingDir = oppData.facingDir; oppVisual().classList.toggle('blocking', opp.isBlocking); 
             
-            // ĐỒNG BỘ SKIN ĐỐI THỦ P2 (Chuẩn xác 100%)
             if (oppData.classId && oppData.classId !== oppClassId) {
                 oppClassId = oppData.classId;
                 if (!opp.isDead) {
@@ -693,7 +697,6 @@
                     }
                 }
             }
-            // Fix gửi socket chết cho đồng đội
             if (oppData.isDead !== undefined) { opp.isDead = oppData.isDead; if (opp.isDead) oppWrapper().classList.add('dead'); }
         });
 
@@ -773,7 +776,7 @@
             if(ult2) { ult2.innerText = "Ult: ĐÃ DÙNG"; ult2.style.background = "#555"; ult2.style.boxShadow = "none"; }
             
             let dir = me.facingDir; let px = me.x + 30; let py = me.y + 40;
-            let ultKey = classes.find(c => c.id === currentClassId).ult;
+            let ultKey = currentEquip === 'none' ? classes.find(c => c.id === currentClassId).ult : currentEquip;
             let wData = unique_weapons[ultKey] || ultimates[ultKey] || weapons[ultKey];
             let ultType = wData ? (wData.ult_type || wData.type) : 'melee';
             
@@ -857,7 +860,7 @@
                 if(atkKey === 'gravity_hammer') spawnAndSend('shockwave', 0, groundY+70, 0, 0);
 
                 let dmg = atkKey === 'dragon_blade' ? 75 : (atkKey === 'gravity_hammer' ? 65 : (atkKey === 'vampiric_sword' ? 45 : (atkKey === 'katana' ? 35 : (atkKey === 'spear' ? 30 : 15)))); 
-                if(me.damageBuff > 0) dmg = Math.floor(dmg * 1.5); // Áp dụng nộ
+                if(me.damageBuff > 0) dmg = Math.floor(dmg * 1.5); 
 
                 let range = (atkKey === 'spear' || atkKey === 'dragon_blade') ? 180 : (atkKey === 'katana' ? 120 : 70);
                 let wEffect = 'bleed'; if (atkKey === 'gravity_hammer') wEffect = 'slow'; if (atkKey === 'dragon_blade') wEffect = 'burn';
@@ -914,7 +917,7 @@
             if(target.isDead) return;
             
             if (target === p2 && target.isBurrowed) return;
-            if (target.isInvulnerable > 0) return; // Miễn sát thương từ Q
+            if (target.isInvulnerable > 0) return; 
 
             if (target === p2 && type !== 'magic' && document.getElementById('p2-vis').classList.contains('reflecting')) {
                 handleDamage(getMe(), dmg, type, false, effect, isHeadshot); return;
@@ -946,7 +949,6 @@
             if (effect === 'slow') { target.statusEffects.slow = 120; showFloatingText(target.x, target.y, "Chậm!", 'status-text'); tVis.classList.add('status-slow'); }
             if (effect === 'bleed') { target.statusEffects.bleed = 240; showFloatingText(target.x, target.y, "Mất Máu!", 'status-text'); tVis.classList.add('status-bleed'); }
 
-            // HIT STOP Visual
             tVis.classList.add('hit-stop'); setTimeout(() => tVis.classList.remove('hit-stop'), 50);
             showFloatingText(target.x + 30, target.y - 20, "-"+Math.floor(actualDmg), isHeadshot ? 'dmg-crit' : 'dmg-text');
 
@@ -1042,7 +1044,6 @@
                 
                 let target = (e.isMine || e.isAlly) ? getOpp() : getMe();
 
-                // CÁC KỸ NĂNG ULTIMATE CHẠM
                 if (e.type === 'dragon_wave') {
                     if(e.age > 60) { e.el.remove(); entities.splice(i, 1); continue; }
                     if (Math.abs(e.x - target.x) < 100 && Math.abs(e.y - target.y) < 150 && !target.isDead && !e.hasHit) { e.hasHit = true; let dWaveDmg = 150; if(e.isMine && gameMode==='online') socket.emit('playerHit', {roomId: currentRoom, damage: dWaveDmg, type: 'energy', effect: 'burn'}); if(e.isMine && (gameMode==='coop' || gameMode==='daily_boss')) socket.emit('hitCoopBoss', dWaveDmg); if(e.isMine || (!e.isMine && gameMode!=='online')) handleDamage(target, dWaveDmg, 'energy', e.isMine, 'burn'); } continue;
