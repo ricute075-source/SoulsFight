@@ -26,19 +26,38 @@
         .btn-world { border-color: var(--neon-gold); color: var(--neon-gold); } .btn-world:hover:not(:disabled) { background: var(--neon-gold); color: #000; box-shadow: 0 0 15px var(--neon-gold);}
         .btn-merchant { border-color: var(--neon-purple); color: var(--neon-purple); } .btn-merchant:hover:not(:disabled) { background: var(--neon-purple); color: #fff; box-shadow: 0 0 15px var(--neon-purple);}
         
-        /* GIAO DIỆN CHỌN NHÂN VẬT SHOWCASE (MỚI) */
-        .hero-showcase-container { display: flex; align-items: center; justify-content: center; gap: 30px; margin-bottom: 15px; width: 100%;}
-        .hero-stage { width: 140px; height: 180px; background: radial-gradient(ellipse at bottom, rgba(102, 252, 241, 0.5) 0%, transparent 70%); border: 2px solid var(--neon-cyan); border-radius: 12px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 -20px 30px rgba(102, 252, 241, 0.2); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; position: relative; }
-        .hero-stage:hover { transform: scale(1.05); box-shadow: 0 10px 40px rgba(102, 252, 241, 0.5), inset 0 -20px 40px rgba(102, 252, 241, 0.4); border-color: #fff;}
-        .hero-stage .player-visual { transform: scale(1.6); transform-origin: bottom center; pointer-events: none; }
-        .arrow-btn { background: none; border: none; color: var(--neon-cyan); font-size: 40px; cursor: pointer; transition: 0.2s; padding: 0 10px; }
-        .arrow-btn:hover { color: #fff; text-shadow: 0 0 20px var(--neon-cyan); transform: scale(1.2); }
+        /* CHỌN CHỨC NGHIỆP & 3D SHOWCASE */
+        .class-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; width: 100%; margin-bottom: 15px; }
+        .class-card { background: #111; border: 2px solid #555; border-radius: 8px; padding: 10px 5px; cursor: pointer; transition: 0.2s; position: relative; text-align: center; }
+        .class-card:hover { transform: translateY(-3px); border-color: #fff; }
+        .class-card.active { border-color: var(--neon-gold); box-shadow: 0 0 15px var(--neon-gold); background: rgba(241, 196, 15, 0.1); }
+        .class-icon { font-size: 24px; margin-bottom: 5px; }
+        .class-name { font-size: 11px; font-weight: bold; color: #fff; text-transform: uppercase; }
+        .class-desc-panel { background: rgba(0,0,0,0.8); padding: 10px; border-radius: 6px; border: 1px dashed var(--neon-gold); margin-bottom: 15px; width: 100%; box-sizing: border-box; min-height: 50px; font-size: 13px; color: #ddd;}
         .class-q-skill { color: var(--neon-gold); font-weight: bold; }
 
+        /* GIAO DIỆN 3D XOAY */
+        .hero-showcase-container { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 10px; width: 100%; perspective: 1000px; }
+        .arrow-btn { background: none; border: none; color: var(--neon-cyan); font-size: 40px; cursor: pointer; transition: 0.2s; padding: 0 15px; z-index: 50; }
+        .arrow-btn:hover { color: #fff; text-shadow: 0 0 20px var(--neon-cyan); transform: scale(1.2); }
+        
+        .showcase-3d-wrapper { width: 160px; height: 200px; position: relative; cursor: grab; z-index: 10;}
+        .showcase-3d-wrapper:active { cursor: grabbing; }
+        .hero-stage-3d { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transform: translateZ(-30px); }
+        
+        .stage-face { position: absolute; width: 160px; height: 200px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 30px; box-sizing: border-box; border-radius: 12px; backface-visibility: hidden;}
+        .face-front { transform: translateZ(30px); background: radial-gradient(ellipse at bottom, rgba(102, 252, 241, 0.4) 0%, rgba(10,15,20,0.9) 70%); border: 2px solid var(--neon-cyan); box-shadow: inset 0 0 20px rgba(102, 252, 241, 0.2), 0 10px 30px rgba(0,0,0,0.8); }
+        .face-back { transform: rotateY(180deg) translateZ(30px); background: radial-gradient(ellipse at center, rgba(142, 68, 173, 0.4) 0%, rgba(10,15,20,0.9) 70%); border: 2px dashed var(--neon-purple); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .face-left { transform: rotateY(-90deg) translateZ(80px); width: 60px !important; left: 50px; background: rgba(10,15,20,0.95); border: 1px solid var(--neon-cyan); border-radius: 4px;}
+        .face-right { transform: rotateY(90deg) translateZ(80px); width: 60px !important; left: 50px; background: rgba(10,15,20,0.95); border: 1px solid var(--neon-cyan); border-radius: 4px;}
+
+        .color-picker-btn { background: #000; color: #fff; border: 1px solid var(--neon-gold); padding: 8px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; transition: 0.2s; box-shadow: 0 0 10px rgba(241, 196, 15, 0.3); margin-top: 10px;}
+        .color-picker-btn:hover { background: var(--neon-gold); color: #000; box-shadow: 0 0 20px var(--neon-gold); }
+
+        /* UI DANH SÁCH VŨ KHÍ */
         .inventory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%;}
         .btn-equip { width: 100%; padding: 8px 5px; font-size: 11px; border: 1px solid #45a29e; background: #111; border-radius: 4px; margin: 0; position: relative; overflow: hidden;} 
         .btn-equip.active { background: var(--neon-cyan); color: var(--bg-dark); box-shadow: 0 0 15px var(--neon-cyan); border-color: var(--neon-cyan);}
-        
         .stats-bar { display: flex; justify-content: space-around; width: 100%; font-size: 18px; color: var(--neon-gold); font-weight: bold; margin-bottom: 15px; background: rgba(0,0,0,0.6); padding: 10px 0; border-radius: 8px; border: 1px solid #333;}
         #shop-list { display: flex; flex-direction: column; width: 100%; gap: 10px;}
         .shop-item { display: flex; justify-content: space-between; background: rgba(31, 40, 51, 0.8); padding: 12px 20px; border-radius: 8px; align-items: center; font-size: 14px; border: 1px solid var(--neon-cyan); box-shadow: inset 0 0 10px rgba(0,0,0,0.5);}
@@ -75,21 +94,21 @@
         /* SÀN ĐẤU & VẬT LÝ HITBOX MỚI */
         #arena { width: 800px; height: 400px; background-color: #1e272e; position: relative; border: 4px solid var(--neon-cyan); border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.9), inset 0 0 60px rgba(0,0,0,0.6); overflow: hidden;}
         
-        /* Hitbox vô hình, bọc Skin bên trong */
         .player-wrapper { width: 60px; height: 90px; position: absolute; z-index: 5; display: flex; align-items: flex-end; justify-content: center; }
         .player-visual { width: 60px; height: 90px; border-radius: 8px; transition: filter 0.1s, transform 0.1s ease-out; box-shadow: 0 0 15px rgba(255,255,255,0.2);}
-        
+        #menu-hero-visual { transform: scale(1.5); transform-origin: bottom center; pointer-events: none; }
+
         /* CÁC CLASS SKINS */
-        .visual-c1 { background: linear-gradient(to bottom, #bdc3c7, #7f8c8d); border-radius: 8px 8px 0 0; border: 2px solid #fff; box-shadow: 0 0 15px #bdc3c7;} 
-        .visual-c2 { background: linear-gradient(to bottom, #2c3e50, #000); border-radius: 50% 50% 0 0; box-shadow: 0 0 20px #8e44ad; width: 50px; height: 80px; border: 1px dashed #8e44ad;} 
-        .visual-c3 { background: linear-gradient(to bottom, #e74c3c, #c0392b); border-radius: 15px; border-top: 4px solid #fff; width: 70px; height: 85px; box-shadow: 0 0 20px #e74c3c;} 
-        .visual-c4 { background: linear-gradient(to bottom, #9b59b6, #8e44ad); border-radius: 0 25px 25px 0; width: 55px; height: 95px; box-shadow: 0 0 15px #9b59b6;} 
-        .visual-c5 { background: linear-gradient(to bottom, #f39c12, #e67e22); border-radius: 20px 20px 5px 5px; box-shadow: inset 0 10px 20px rgba(255,255,255,0.5), 0 0 15px #f39c12; } 
-        .visual-c6 { background: linear-gradient(to bottom, #f1c40f, #d35400); clip-path: polygon(50% 0%, 100% 20%, 100% 100%, 0 100%, 0 20%); width: 65px; box-shadow: 0 0 15px #f1c40f;} 
-        .visual-c7 { background: linear-gradient(to bottom, #c0392b, #8b0000); border-bottom: 8px solid #ff0000; border-radius: 10px; filter: drop-shadow(0 10px 5px red); } 
-        .visual-c8 { background: linear-gradient(to bottom, #95a5a6, #7f8c8d); border: 4px solid #34495e; border-radius: 0; width: 65px; height: 85px; } 
-        .visual-c9 { background: linear-gradient(to bottom, #1abc9c, #16a085); border-radius: 30px; border-right: 4px solid #fff; box-shadow: 0 0 15px #1abc9c;} 
-        .visual-c10 { background: linear-gradient(to bottom, #3498db, #2980b9); border-radius: 50%; box-shadow: 0 0 20px #3498db; width: 75px; height: 75px;} 
+        .visual-c1 { border-radius: 8px 8px 0 0; } 
+        .visual-c2 { border-radius: 50% 50% 0 0; width: 50px; height: 80px; } 
+        .visual-c3 { border-radius: 15px; width: 70px; height: 85px; } 
+        .visual-c4 { border-radius: 0 25px 25px 0; width: 55px; height: 95px; } 
+        .visual-c5 { border-radius: 20px 20px 5px 5px; } 
+        .visual-c6 { clip-path: polygon(50% 0%, 100% 20%, 100% 100%, 0 100%, 0 20%); width: 65px; } 
+        .visual-c7 { border-radius: 10px; } 
+        .visual-c8 { border-radius: 0; width: 65px; height: 85px; } 
+        .visual-c9 { border-radius: 30px; } 
+        .visual-c10 { border-radius: 50%; width: 75px; height: 75px;} 
 
         /* HIỆU ỨNG NHÂN VẬT */
         .blocking { box-shadow: 0 0 25px 10px #fff, inset 0 0 15px #fff !important; border: 2px solid #fff !important; border-radius: 5px; } 
@@ -148,7 +167,6 @@
         .heal-beam { position: absolute; width: 60px; height: 15px; background: #2ecc71; border-radius: 8px; box-shadow: 0 0 25px #2ecc71, 0 0 10px #fff; }
         .boss_melee { position: absolute; width: 80px; height: 110px; background: transparent; z-index: 20;}
 
-        /* ĐẠN CƠ BẢN */
         .plasma_bullet { position: absolute; width: 35px; height: 10px; background: #00cec9; border-radius: 5px; box-shadow: 0 0 20px #00cec9; }
         .holy_light { position: absolute; width: 50px; height: 50px; background: radial-gradient(circle, #ffeaa7, #fdcb6e); border-radius: 50%; box-shadow: 0 0 30px #ffeaa7; mix-blend-mode: screen; }
         .storm_arrow { position: absolute; width: 6px; height: 45px; background: #fff; box-shadow: 0 0 15px #00cec9; border-radius: 3px;}
@@ -163,7 +181,7 @@
         @keyframes flash { 0% { opacity: 1; filter: contrast(2) drop-shadow(0 0 20px #fff); } 50% { opacity: 0.3; filter: contrast(1); } 100% { opacity: 1; filter: contrast(2) drop-shadow(0 0 20px #fff); } }
         @keyframes strobeBlood { 0% { opacity: 1; filter: contrast(2) drop-shadow(0 0 15px red); } 50% { opacity: 0.5; filter: contrast(1); } 100% { opacity: 1; filter: contrast(2) drop-shadow(0 0 15px red); } }
         
-        .shuriken { width: 34px; height: 34px; background: #ccc; clip-path: polygon(50% 0%, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0% 50%, 40% 40%); animation: spin 0.1s linear infinite; position: absolute; filter: drop-shadow(0 0 6px #fff);}
+        .shuriken { width: 34px; height: 34px; background: #ccc; clip-path: polygon(50% 0%, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0% 50%, 40% 40%); animation: spin 0.1s linear infinite; position: absolute; filter: drop-shadow(0 0 4px #fff);}
         .shotgun_bullet { position: absolute; width: 12px; height: 12px; background: #fdcb6e; border-radius: 50%; box-shadow: 0 0 8px #fdcb6e;}
         .sniper_bullet { position: absolute; width: 60px; height: 6px; background: #fff; box-shadow: 0 0 20px #fff, -15px 0 15px rgba(255,255,255,0.5); }
         .fireball { position: absolute; width: 55px; height: 55px; background: radial-gradient(circle, #fff, var(--neon-gold) 40%, var(--neon-red)); border-radius: 50%; box-shadow: 0 0 25px var(--neon-red); mix-blend-mode: screen;}
@@ -175,7 +193,6 @@
         .horse_charge { position: absolute; width: 110px; height: 80px; background: rgba(139, 69, 19, 0.9); border-radius: 15px; box-shadow: 0 0 35px #8B4513; border-right: 8px solid #fff; }
         .meteor { position: absolute; width: 65px; height: 65px; background: radial-gradient(circle, #fff, var(--neon-red)); border-radius: 50%; box-shadow: 0 0 50px var(--neon-red); z-index: 15;}
         
-        /* ĐẠN ĐỘC NHẤT & CƠ CHẾ BOSS */
         .bubble { position: absolute; width: 45px; height: 45px; background: radial-gradient(circle, rgba(255,255,255,0.9), rgba(0, 206, 201, 0.5)); border-radius: 50%; box-shadow: inset 0 0 15px #fff, 0 0 20px #00cec9; animation: rainbowFish 1.5s linear infinite; }
         .wind_blade { position: absolute; width: 75px; height: 75px; background: transparent; border-radius: 50%; box-shadow: -12px 0 25px #55efc4; border-left: 10px solid #00b894; animation: spin 0.15s linear infinite; z-index: 10; }
         .plague_cloud { position: absolute; width: 300px; height: 180px; background: radial-gradient(ellipse, rgba(0, 184, 148, 0.8), transparent); filter: blur(10px); z-index: 5; animation: spin 4s linear infinite; }
@@ -221,15 +238,35 @@
             
             <div style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 8px; border: 1px solid #333; margin-bottom: 15px; width: 100%; box-sizing: border-box;">
                 <h4 style="margin: 0 0 10px 0; color: var(--neon-gold);">CHỌN CHỨC NGHIỆP (KỸ NĂNG Q)</h4>
+                
                 <div class="hero-showcase-container">
                     <button class="arrow-btn" onclick="prevHero()">&#9664;</button>
-                    <div class="hero-stage" onclick="nextHero()">
-                        <div id="menu-hero-visual" class="player-visual visual-c1"></div>
+                    <div class="showcase-3d-wrapper" id="showcase-wrapper">
+                        <div class="hero-stage-3d" id="hero-stage-3d">
+                            <div class="stage-face face-front">
+                                <div id="menu-hero-visual" class="player-visual visual-c1"></div>
+                            </div>
+                            <div class="stage-face face-back">
+                                <div style="color: var(--neon-cyan); transform: scaleX(-1); text-align: center; font-size: 14px; font-weight: bold; text-shadow: 0 0 10px var(--neon-cyan);">
+                                    CLASS<br><br><span id="back-hero-name" style="color: var(--neon-gold)">KỴ SĨ MÙ</span>
+                                </div>
+                            </div>
+                            <div class="stage-face face-left"></div>
+                            <div class="stage-face face-right"></div>
+                        </div>
                     </div>
                     <button class="arrow-btn" onclick="nextHero()">&#9654;</button>
                 </div>
+                
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <button class="color-picker-btn" onclick="document.getElementById('color-picker').click()">🎨 ĐỔI MÀU CHO SKIN NÀY</button>
+                    <input type="color" id="color-picker" style="display:none" onchange="changeSkinColor(event)">
+                </div>
+
                 <div id="hero-name-display" style="font-size: 18px; font-weight: bold; color: #fff; margin-bottom: 5px;">KỴ SĨ MÙ</div>
                 <div id="hero-desc-display" style="font-size: 13px; color: #aaa; text-align: center; min-height: 40px;">[Q] Khiên Chống Trả: Kháng sát thương.</div>
+                
+                <div class="class-grid" id="class-grid-container" style="margin-top: 10px;"></div>
             </div>
 
             <div style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 8px; border: 1px solid #333; margin-bottom: 15px; width: 100%; box-sizing: border-box;">
@@ -315,34 +352,104 @@
         let isLobbyHost = false; let isGameHost = false; 
         let bo3Score = { p1: 0, p2: 0 }; let bossTimerInterval = null; 
         
-        // --- 10 CHỨC NGHIỆP TƯƠNG ĐƯƠNG 10 SKIN ---
+        // --- 10 CHỨC NGHIỆP ---
         const classes = [
             { id: 1, name: "Kỵ Sĩ Mù", icon: "🛡️", color: "#bdc3c7", cd: 8, desc: "<span class='class-q-skill'>[Q] Khiên Chống Trả:</span> Kháng sát thương hoàn toàn trong 1.5s." },
             { id: 2, name: "Sát Thủ Bóng Đêm", icon: "🗡️", color: "#8e44ad", cd: 5, desc: "<span class='class-q-skill'>[Q] Lướt Bóng (Shade Dash):</span> Lướt tới trước, vô địch trong lúc lướt." },
-            { id: 3, name: "Cuồng Chiến Sĩ", icon: "🪓", color: "#e74c3c", cd: 10, desc: "<span class='class-q-skill'>[Q] Huyết Nộ:</span> Đổi máu lấy 1.5x sát thương trong 5s." },
-            { id: 4, name: "Xạ Thủ Không Gian", icon: "🏹", color: "#9b59b6", cd: 6, desc: "<span class='class-q-skill'>[Q] Cú Nhảy Không Gian:</span> Giật lùi về sau và để lại mìn nổ." },
-            { id: 5, name: "Pháp Sư Nguyên Tố", icon: "🔥", color: "#e67e22", cd: 8, desc: "<span class='class-q-skill'>[Q] Thiên Lôi:</span> Gọi sấm sét giáng thẳng xuống mục tiêu." },
-            { id: 6, name: "Tu Sĩ Lưu Vong", icon: "✝️", color: "#f1c40f", cd: 12, desc: "<span class='class-q-skill'>[Q] Vùng Đất Thánh:</span> Tạo Aura hồi máu cho bản thân và đồng đội." },
-            { id: 7, name: "Kẻ Kỵ Huyết", icon: "🩸", color: "#c0392b", cd: 10, desc: "<span class='class-q-skill'>[Q] Vụ Nổ Máu:</span> Gây sát thương diện rộng và hút máu." },
+            { id: 3, name: "Cuồng Chiến Sĩ", icon: "🪓", color: "#e74c3c", cd: 10, desc: "<span class='class-q-skill'>[Q] Huyết Nộ:</span> Rút 20 HP bản thân, tăng 1.5x sát thương trong 5s." },
+            { id: 4, name: "Xạ Thủ", icon: "🏹", color: "#9b59b6", cd: 6, desc: "<span class='class-q-skill'>[Q] Cú Nhảy Không Gian:</span> Giật lùi về sau cực nhanh và để lại mìn nổ." },
+            { id: 5, name: "Pháp Sư", icon: "🔥", color: "#e67e22", cd: 8, desc: "<span class='class-q-skill'>[Q] Thiên Lôi:</span> Gọi cột sấm sét giáng thẳng xuống đầu kẻ địch." },
+            { id: 6, name: "Tu Sĩ", icon: "✝️", color: "#f1c40f", cd: 12, desc: "<span class='class-q-skill'>[Q] Vùng Đất Thánh:</span> Tạo Aura hồi máu cho bản thân và đồng đội." },
+            { id: 7, name: "Huyết Quỷ", icon: "🩸", color: "#c0392b", cd: 10, desc: "<span class='class-q-skill'>[Q] Vụ Nổ Máu:</span> Gây sát thương diện rộng và hút máu." },
             { id: 8, name: "Kỹ Sư Cơ Khí", icon: "⚙️", color: "#7f8c8d", cd: 8, desc: "<span class='class-q-skill'>[Q] Bom Hóa Học:</span> Ném bom tạo vũng Axit dính sát thương lâu dài." },
             { id: 9, name: "Lãng Khách Gió", icon: "🌪️", color: "#1abc9c", cd: 8, desc: "<span class='class-q-skill'>[Q] Tường Gió:</span> Phóng đao gió chậm, xuyên thấu mọi thứ." },
-            { id: 10, name: "Chúa Tể Thời Gian", icon: "⏳", color: "#3498db", cd: 15, desc: "<span class='class-q-skill'>[Q] Đóng Băng:</span> Đóng băng thời gian, gây Làm Chậm vĩnh viễn lên địch." }
+            { id: 10, name: "Thời Không", icon: "⏳", color: "#3498db", cd: 15, desc: "<span class='class-q-skill'>[Q] Đóng Băng:</span> Đóng băng thời gian, gây Làm Chậm vĩnh viễn lên địch." }
         ];
         
         let currentHeroIndex = parseInt(localStorage.getItem('currentHeroIndex')) || 0;
         let currentClassId = classes[currentHeroIndex].id;
+        let customColors = JSON.parse(localStorage.getItem('customSkinColors')) || {};
+
+        // XỬ LÝ ĐỔI MÀU CUSTOM
+        function changeSkinColor(e) {
+            let color = e.target.value;
+            customColors[currentClassId] = color;
+            localStorage.setItem('customSkinColors', JSON.stringify(customColors));
+            updateMenuHero();
+        }
+
+        // HÀM ÁP DỤNG MÀU LÊN SKIN
+        function applyColorToVisual(el, classId) {
+            if (!el) return;
+            let cData = classes.find(c => c.id === classId);
+            let color = customColors[classId] || cData.color;
+            
+            el.removeAttribute('style'); // Xóa css cũ
+            el.style.background = `linear-gradient(to bottom, ${color}, #111)`;
+            el.style.boxShadow = `0 0 20px ${color}`;
+            
+            if (classId === 1) el.style.border = `2px solid #fff`;
+            if (classId === 2) { el.style.border = `1px dashed ${color}`; el.style.width = '50px'; el.style.height = '80px'; }
+            if (classId === 3) { el.style.borderTop = `4px solid #fff`; el.style.width = '70px'; el.style.height = '85px'; }
+            if (classId === 4) { el.style.width = '55px'; el.style.height = '95px'; }
+            if (classId === 5) el.style.boxShadow = `inset 0 10px 20px rgba(255,255,255,0.5), 0 0 20px ${color}`;
+            if (classId === 6) el.style.width = '65px';
+            if (classId === 7) { el.style.borderBottom = `8px solid ${color}`; el.style.filter = `drop-shadow(0 10px 5px ${color})`; }
+            if (classId === 8) { el.style.border = `4px solid #222`; el.style.width = '65px'; el.style.height = '85px'; }
+            if (classId === 9) el.style.borderRight = `4px solid #fff`;
+            if (classId === 10) { el.style.width = '75px'; el.style.height = '75px'; }
+        }
 
         function updateMenuHero() {
             let hero = classes[currentHeroIndex];
             currentClassId = hero.id;
             localStorage.setItem('currentHeroIndex', currentHeroIndex);
             
-            document.getElementById('menu-hero-visual').className = 'player-visual visual-c' + hero.id;
+            let vis = document.getElementById('menu-hero-visual');
+            vis.className = 'player-visual visual-c' + hero.id;
+            applyColorToVisual(vis, hero.id);
+
+            document.getElementById('back-hero-name').innerText = hero.name;
             document.getElementById('hero-name-display').innerText = hero.name;
             document.getElementById('hero-desc-display').innerHTML = hero.desc;
+
+            let currentColor = customColors[hero.id] || hero.color;
+            document.getElementById('color-picker').value = currentColor;
+            renderClassUI(); 
         }
+
         function nextHero() { currentHeroIndex = (currentHeroIndex + 1) % classes.length; updateMenuHero(); }
         function prevHero() { currentHeroIndex = (currentHeroIndex - 1 + classes.length) % classes.length; updateMenuHero(); }
+
+        // --- HỆ THỐNG QUAY 3D SHOWCASE ---
+        let stage3d = document.getElementById('hero-stage-3d');
+        let currentRotateY = 0; let targetRotateY = 0; let isDragging3D = false; let previousMouseX = 0;
+
+        document.getElementById('showcase-wrapper').addEventListener('mousedown', (e) => { isDragging3D = true; previousMouseX = e.clientX; });
+        document.addEventListener('mousemove', (e) => { if (!isDragging3D) return; let delta = e.clientX - previousMouseX; targetRotateY += delta * 1.5; previousMouseX = e.clientX; });
+        document.addEventListener('mouseup', () => { isDragging3D = false; });
+        
+        function animate3D() {
+            if (!isDragging3D) targetRotateY += 0.6; // Auto spin
+            currentRotateY += (targetRotateY - currentRotateY) * 0.1; // Smooth interpolate
+            if(stage3d) stage3d.style.transform = `translateZ(-30px) rotateY(${currentRotateY}deg)`;
+            requestAnimationFrame(animate3D);
+        }
+        animate3D();
+
+        // Render UI Classes
+        function renderClassUI() {
+            let html = '';
+            classes.forEach((c, index) => {
+                let isActive = c.id === currentClassId ? 'active' : '';
+                let cColor = customColors[c.id] || c.color;
+                html += `<div class="class-card ${isActive}" onclick="currentHeroIndex=${index}; updateMenuHero();" style="border-bottom: 3px solid ${cColor}">
+                            <div class="class-icon">${c.icon}</div>
+                            <div class="class-name">${c.name}</div>
+                         </div>`;
+            });
+            document.getElementById('class-grid-container').innerHTML = html;
+        }
 
         const maps = [ { name: "Hỏa Diện", bg: "linear-gradient(to bottom, #4a0e0e 0%, #1a0505 100%)", buff: "energy" }, { name: "Lõi Tương Lai", bg: "linear-gradient(to bottom, #001f3f 0%, #000 100%)", buff: "piercing" }, { name: "Cấm Địa", bg: "linear-gradient(to bottom, #2b3a2a 0%, #1a1a1a 100%)", buff: "ballistic" }, { name: "Phế Tích Thép", bg: "linear-gradient(to bottom, #3b3b3b 0%, #111 100%)", buff: "melee" }, { name: "Không Gian Ảo", bg: "linear-gradient(to bottom, #190033 0%, #000 100%)", buff: "explosive" } ];
         let currentMapBuff = '';
@@ -406,7 +513,7 @@
         }
 
         function renderShopAndInventory() {
-            updateMenuHero();
+            updateMenuHero(); // Call to build class UI
             let shopHtml = ''; let invHtml = '<button class="btn btn-equip" id="eq-none" onclick="equipItem(\'none\')">TAY KHÔNG</button> ';
             for(let key in weapons) {
                 let isOwned = unlocked[key];
@@ -464,7 +571,7 @@
             p1 = { x: getP1StartX(), y: groundY, vy: 0, hp: p1.maxHp || 200, maxHp: p1.maxHp || 200, stamina: 100, ammo: 30, isDead: false, isBlocking: false, jumpCount: 0, facingDir: getP1StartDir(), stunTimer: 0, isParrying: false, parryTimer: 0, statusEffects: { burn: 0, slow: 0, bleed: 0 }, qCooldown: 0, isInvulnerable: 0, damageBuff: 0 };
             p2 = { x: getP2StartX(), y: groundY, vy: 0, hp: p2.maxHp || 200, maxHp: p2.maxHp || 200, stamina: 100, ammo: 30, isDead: false, isBlocking: false, jumpCount: 0, facingDir: getP2StartDir(), stunTimer: 0, isParrying: false, parryTimer: 0, lockedTargetId: null, phase: 1, isBurrowed: false, statusEffects: { burn: 0, slow: 0, bleed: 0 }, qCooldown: 0, isInvulnerable: 0, damageBuff: 0 };
             
-            // XÓA SẠCH SẼ TÀN DƯ CỦA TRẬN TRƯỚC (QUÉT SẠCH BÓNG MA)
+            // XÓA SẠCH SẼ TÀN DƯ CỦA TRẬN TRƯỚC
             document.querySelectorAll('.dash-ghost, .weapon-cast, .effect-text, .slash-arc, .bomb-explode, .shockwave, .heal-aura, .heal-beam, .boss_melee, .plasma_bullet, .holy_light, .storm_arrow, .bullet, .rock, .boulder, .tornado, .bomb, .grenade, .shuriken, .shotgun_bullet, .sniper_bullet, .fireball, .rocket, .laser, .shield_aura, .giant_shield_aura, .vine, .horse_charge, .meteor, .bubble, .wind_blade, .plague_cloud, .lightning_strike, .blood_drain_beam, .earth-spike, .acid-bomb, .acid-pool, .target-ring, .ult_divine, .omega_beam, .dragon_wave, .black_hole, .void_slash, .ult_slash, .ult_nuke').forEach(e => e.remove());
             document.getElementById('teammates-container').innerHTML = ''; teammates = {};
             entities = []; ultimateReady = true; keys.space = false;
@@ -485,9 +592,11 @@
             
             // CẤP PHÁT CLASS CSS SẠCH SẼ MỚI
             p1Vis.classList.add('visual-c' + currentClassId);
+            applyColorToVisual(p1Vis, currentClassId);
             
             if (gameMode === 'online') {
                 p2Vis.classList.add('visual-c' + oppClassId);
+                // Note: opponent color applied upon network receive
             } else if (gameMode === 'bot' || gameMode === 'coop' || gameMode === 'daily_boss') {
                 if (gameMode !== 'daily_boss') p2Vis.classList.add('boss-' + currentBoss);
             }
@@ -567,10 +676,16 @@
             if(gameMode !== 'online') return; 
             let opp = getOpp(); opp.x = oppData.x; opp.y = oppData.y; opp.isBlocking = oppData.isBlocking; if (oppData.facingDir) opp.facingDir = oppData.facingDir; oppVisual().classList.toggle('blocking', opp.isBlocking); 
             
-            // Đồng bộ class hình dạng đối thủ
             if (oppData.classId && oppData.classId !== oppClassId) {
                 oppClassId = oppData.classId;
-                if (!opp.isDead) oppVisual().className = 'player-visual visual-c' + oppClassId;
+                if (!opp.isDead) {
+                    let p2Vis = document.getElementById('p2-vis');
+                    p2Vis.className = 'player-visual visual-c' + oppClassId;
+                    if (oppData.skinColor) {
+                        p2Vis.style.background = `linear-gradient(to bottom, ${oppData.skinColor}, #111)`;
+                        p2Vis.style.boxShadow = `0 0 20px ${oppData.skinColor}`;
+                    }
+                }
             }
         });
 
@@ -593,58 +708,48 @@
             else if (me.jumpCount < 2) { me.vy = -15; me.jumpCount = 2; showFloatingText(me.x, me.y, "DOUBLE JUMP!", "status-text"); }
         }
         
-        // HÀM KÍCH HOẠT KỸ NĂNG CLASS (Q)
         function doQSkill() {
             let me = getMe(); if(me.isDead || me.stunTimer > 0 || me.qCooldown > 0) return;
             let cData = classes.find(c => c.id === currentClassId);
-            me.qCooldown = cData.cd * 60; // Tính theo frame (60fps)
+            me.qCooldown = cData.cd * 60; 
             
             let qUi = document.getElementById(myRole === 'p1' ? 'q-ui' : 'q-ui2');
             if (qUi) { qUi.classList.add('on-cd'); qUi.innerText = "Q: " + cData.cd + "S"; }
 
             let dir = me.facingDir; let px = me.x + 30; let py = me.y + 40;
             
-            // Cast Animation màu class
-            let castObj = document.createElement('div'); castObj.className = 'weapon-cast'; castObj.style.background = `radial-gradient(circle, ${cData.color} 10%, transparent 60%)`; castObj.style.left = px + 'px'; castObj.style.top = py + 'px'; document.getElementById('arena').appendChild(castObj); setTimeout(() => { if(castObj) castObj.remove(); }, 250);
+            let castObj = document.createElement('div'); castObj.className = 'weapon-cast'; castObj.style.background = `radial-gradient(circle, ${customColors[currentClassId]||cData.color} 10%, transparent 60%)`; castObj.style.left = px + 'px'; castObj.style.top = py + 'px'; document.getElementById('arena').appendChild(castObj); setTimeout(() => { if(castObj) castObj.remove(); }, 250);
 
-            if (currentClassId === 1) { // Kỵ Sĩ: Khiên
-                me.isInvulnerable = 90; // 1.5s
+            if (currentClassId === 1) { 
+                me.isInvulnerable = 90; 
                 myVisual().classList.add('invulnerable'); setTimeout(()=> myVisual().classList.remove('invulnerable'), 1500);
                 showFloatingText(me.x, me.y, "KHIÊN THÁNH!", "parry-text");
             } 
-            else if (currentClassId === 2) { // Sát Thủ: Lướt bóng
+            else if (currentClassId === 2) { 
                 let ghost = document.createElement('div'); ghost.className = 'dash-ghost'; ghost.style.left = me.x + 'px'; ghost.style.top = me.y + 'px'; document.getElementById('arena').appendChild(ghost); setTimeout(()=>ghost.remove(), 300);
                 me.x += dir * 200; me.x = Math.max(0, Math.min(740, me.x));
-                me.isInvulnerable = 30; // Nửa giây lướt
+                me.isInvulnerable = 30; 
                 showFloatingText(me.x, me.y, "LƯỚT!", "status-text");
             }
-            else if (currentClassId === 3) { // Cuồng Chiến: Nộ
-                handleDamage(me, 20, 'magic', false); // Tự gây sát thương
-                me.damageBuff = 300; // 5s buff
+            else if (currentClassId === 3) { 
+                handleDamage(me, 20, 'magic', false); 
+                me.damageBuff = 300; 
                 myVisual().classList.add('berserk-aura'); setTimeout(()=> myVisual().classList.remove('berserk-aura'), 5000);
                 showFloatingText(me.x, me.y, "HUYẾT NỘ!", "boss-warning");
             }
-            else if (currentClassId === 4) { // Xạ Thủ: Lùi bắn
+            else if (currentClassId === 4) { 
                 me.x -= dir * 150; me.x = Math.max(0, Math.min(740, me.x));
                 spawnAndSend('bomb', me.x + dir*50, groundY+70, 0, 0);
             }
-            else if (currentClassId === 5) { // Pháp Sư: Thiên lôi
-                spawnAndSend('lightning_strike', getOpp().x + 10, -200, 0, 0);
-            }
-            else if (currentClassId === 6) { // Tu Sĩ: Vùng hồi máu
-                spawnAndSend('heal-aura', me.x+30, groundY+90, 0, 0);
-            }
-            else if (currentClassId === 7) { // Huyết Quỷ: Nổ máu
+            else if (currentClassId === 5) { spawnAndSend('lightning_strike', getOpp().x + 10, -200, 0, 0); }
+            else if (currentClassId === 6) { spawnAndSend('heal-aura', me.x+30, groundY+90, 0, 0); }
+            else if (currentClassId === 7) { 
                 spawnAndSend('blood_drain_beam', dir===1?me.x:me.x-800, me.y+20, 0, 0);
                 me.hp = Math.min(me.maxHp, me.hp + 30); document.getElementById(myRole==='p1'?'hp1':'hp2').style.width = (me.hp/me.maxHp)*100+'%';
             }
-            else if (currentClassId === 8) { // Kỹ Sư: Mìn choáng
-                spawnAndSend('acid_bomb', px, py, dir*12, -8); // Mượn tạm bomb axit
-            }
-            else if (currentClassId === 9) { // Lãng Khách: Tường gió
-                spawnAndSend('wind_blade', px, py, dir*8, 0); // Lướt cực chậm cản đường
-            }
-            else if (currentClassId === 10) { // Thời Không: Làm chậm
+            else if (currentClassId === 8) { spawnAndSend('acid_bomb', px, py, dir*12, -8); }
+            else if (currentClassId === 9) { spawnAndSend('wind_blade', px, py, dir*8, 0); }
+            else if (currentClassId === 10) { 
                 getOpp().statusEffects.slow = 180;
                 let oppEl = oppVisual(); oppEl.classList.add('status-slow');
                 showFloatingText(getOpp().x, getOpp().y, "ĐÓNG BĂNG!", "status-text");
@@ -901,6 +1006,7 @@
                 if(e.type === 'blood_drain_beam') { if(e.age > 20) { e.el.remove(); entities.splice(i, 1); continue; } e.el.style.left = e.x+'px'; e.el.style.top = e.y+'px'; continue; }
                 if(e.type === 'ult_slash') { if(e.age > 24) { e.el.remove(); entities.splice(i, 1); continue; } e.el.style.left = e.x+'px'; e.el.style.top = e.y+'px'; continue; }
                 if(e.type === 'ult_nuke') { if(e.age > 30) { e.el.remove(); entities.splice(i, 1); continue; } e.el.style.left = e.x+'px'; e.el.style.top = e.y+'px'; continue; }
+                
                 if (e.type === 'target-ring') { if (e.age > 60) { spawnAndSend('lightning_strike', e.x, -200, 0, 0); e.el.remove(); entities.splice(i, 1); } continue; }
 
                 if (e.type === 'acid_bomb') {
@@ -1146,7 +1252,10 @@
 
                 updateEntities();
 
-                if (gameMode === 'online' || gameMode === 'coop') socket.emit('playerUpdate', { roomId: currentRoom, x: me.x, y: me.y, isBlocking: me.isBlocking, facingDir: me.facingDir, classId: currentClassId });
+                if (gameMode === 'online' || gameMode === 'coop') {
+                    let sColor = customColors[currentClassId] || classes.find(c=>c.id===currentClassId).color;
+                    socket.emit('playerUpdate', { roomId: currentRoom, x: me.x, y: me.y, isBlocking: me.isBlocking, facingDir: me.facingDir, classId: currentClassId, skinColor: sColor });
+                }
             }
             animationId = requestAnimationFrame(gameLoop);
         }
